@@ -39,26 +39,43 @@
             <div class="wave-overlay"></div>
         </div>
         <div class="hero-content">
-            <div class="hero-text">
-                <h2 class="hero-title">Join the Crew</h2>
-                <p class="hero-subtitle">Dragon boat racing for everyone in Shadwell, London. All ages, all abilities, all welcome.</p>
-                <div class="hero-buttons">
-                    <a href="#book" class="btn btn-primary">Book Free Taster</a>
-                    <a href="first-timers.html" class="btn btn-secondary">Learn More</a>
+            <div class="hero-grid">
+                <!-- Left: Text Content -->
+                <div class="hero-left">
+                    <div class="hero-text">
+                        <h2 class="hero-title">Join the Crew</h2>
+                        <p class="hero-subtitle">Dragon boat racing for everyone in Shadwell, London. All ages, all abilities, all welcome.</p>
+                        <div class="hero-buttons">
+                            <a href="#book" class="btn btn-primary">Book Free Taster</a>
+                            <a href="first-timers.html" class="btn btn-secondary">Learn More</a>
+                        </div>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <span class="stat-number">20+</span>
+                            <span class="stat-label">Paddlers per boat</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">All Ages</span>
+                            <span class="stat-label">From 12 to 70+</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">Year Round</span>
+                            <span class="stat-label">Training & Events</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="hero-stats">
-                <div class="stat">
-                    <span class="stat-number">20+</span>
-                    <span class="stat-label">Paddlers per boat</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-number">All Ages</span>
-                    <span class="stat-label">From 12 to 70+</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-number">Year Round</span>
-                    <span class="stat-label">Training & Events</span>
+
+                <!-- Right: Video Placeholder -->
+                <div class="hero-right">
+                    <div class="hero-video-card">
+                        <video class="hero-video" autoplay muted loop playsinline>
+                            <!-- Replace src with your video file -->
+                            <source src="videos/hero-dragon-boat.mp4" type="video/mp4">
+                        </video>
+                        <div class="video-card-overlay"></div>
+                        <span class="placeholder-label">Hero Video: Dragon boat action (16:9)</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -70,7 +87,14 @@
             <div class="about-grid">
                 <div class="about-image">
                     <div class="placeholder-image">
-                        <span>Team Action Shot</span>
+                        <span>Team Action Shot (600x500)</span>
+                    </div>
+                    <!-- Video Clip Placeholder -->
+                    <div class="video-clip-placeholder">
+                        <video class="video-clip" autoplay muted loop playsinline>
+                            <source src="videos/training-clip.mp4" type="video/mp4">
+                        </video>
+                        <span class="placeholder-label">Training Session Clip (600x340)</span>
                     </div>
                 </div>
                 <div class="about-text">
@@ -132,6 +156,49 @@
         </div>
     </section>
 
+    <!-- Gallery Section -->
+    <section class="gallery-section">
+        <div class="container">
+            <h3 class="section-title">Life on the Water</h3>
+            <div class="gallery-grid">
+                <div class="gallery-item large">
+                    <div class="placeholder-image">
+                        <span>Race Day Action (800x600)</span>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="placeholder-image">
+                        <span>Team Photo (400x300)</span>
+                    </div>
+                </div>
+                <div class="gallery-item video">
+                    <video class="video-clip" autoplay muted loop playsinline>
+                        <source src="videos/race-highlights.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-play-icon">▶</div>
+                    <span class="placeholder-label">Race Highlights (400x300)</span>
+                </div>
+                <div class="gallery-item">
+                    <div class="placeholder-image">
+                        <span>Social Event (400x300)</span>
+                    </div>
+                </div>
+                <div class="gallery-item video">
+                    <video class="video-clip" autoplay muted loop playsinline>
+                        <source src="videos/team-celebration.mp4" type="video/mp4">
+                    </video>
+                    <div class="video-play-icon">▶</div>
+                    <span class="placeholder-label">Celebration Clip (400x300)</span>
+                </div>
+                <div class="gallery-item">
+                    <div class="placeholder-image">
+                        <span>Shadwell Basin (400x300)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Training Schedule -->
     <section class="schedule">
         <div class="container">
@@ -158,7 +225,7 @@
                     <div class="type">Beginner Friendly</div>
                 </div>
             </div>
-            <p class="schedule-note">Location: Shadwell Basin, London E1W 2YB</p>
+            <p class="schedule-note">Location: Docklands Sailing and Watersports Centre, London E14 3QS</p>
         </div>
     </section>
 
@@ -190,13 +257,71 @@
         </div>
     </section>
 
+    <!-- Getting There Section -->
+    <section class="getting-there" id="location">
+        <div class="container">
+            <h3 class="section-title">Getting There</h3>
+            <div class="location-grid">
+                <div class="location-info">
+                    <h4>Docklands Sailing and Watersports Centre</h4>
+                    <p class="address">
+                        <strong>Address:</strong><br>
+                        235A Westferry Rd<br>
+                        London E14 3QS<br>
+                        United Kingdom
+                    </p>
+
+                    <div class="transport-options">
+                        <div class="transport-item">
+                            <span class="transport-icon">🚇</span>
+                            <div>
+                                <strong>By Public Transport</strong>
+                                <p>Canary Wharf Station (DLR & Underground) - followed by multiple bus routes (277, D7, 135)</p>
+                            </div>
+                        </div>
+                        <div class="transport-item">
+                            <span class="transport-icon">🚗</span>
+                            <div>
+                                <strong>By Car</strong>
+                                <p>Free on-site parking.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="location-image-placeholder">
+                        <div class="placeholder-image">
+                            <span>Basin Entrance Photo (400x250)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="map-container">
+                    <!-- Replace the src with your actual Google Maps embed URL -->
+                    <iframe
+                        class="google-map"
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d39739.42439588111!2d-0.04503227557427652!3d51.500115183555884!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487602bfc2086537%3A0x3ffd904052c9ef44!2sDocklands%20Sailing%20and%20Watersports%20Centre!5e0!3m2!1sen!2suk!4v1769987165875!5m2!1sen!2suk" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        width="100%"
+                        height="100%"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                    <div class="map-placeholder-overlay">
+                        <span>Google Maps Embed - Replace iframe src with your embed URL</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
                     <h4>Shadwell Dragons</h4>
-                    <p>London's premier dragon boat racing team, welcoming paddlers of all abilities since [Year].</p>
+                    <p>London's premier dragon boat racing team, welcoming paddlers of all abilities since 1991.</p>
                 </div>
                 <div class="footer-col">
                     <h5>Quick Links</h5>
@@ -209,8 +334,8 @@
                 </div>
                 <div class="footer-col">
                     <h5>Training Location</h5>
-                    <p>Shadwell Basin<br>
-                    London E1W 2YB<br>
+                    <p>Docklands Sailing and Watersports Centre<br>
+                    London E14 3QS<br>
                     United Kingdom</p>
                 </div>
                 <div class="footer-col">
