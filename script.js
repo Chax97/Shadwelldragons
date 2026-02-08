@@ -300,4 +300,133 @@ function initCarousels() {
     const pricingCarousel = new Carousel('pricing', true);
     // Initialize special memberships carousel with auto-rotate
     const specialCarousel = new Carousel('special', true);
+    // Initialize gallery carousel
+    initGalleryCarousel();
+}
+
+// Gallery Carousel - Auto-rotating revolving door style
+function initGalleryCarousel() {
+    const track = document.querySelector('.gallery-carousel-track');
+    const dotsContainer = document.querySelector('.gallery-carousel-dots');
+
+    if (!track || !dotsContainer) return;
+
+    const cards = Array.from(track.children);
+    if (cards.length === 0) return;
+
+    let currentIndex = 0;
+    let autoRotateInterval = null;
+    const autoRotateDelay = 5000; // 5 seconds
+    let isHovered = false;
+
+    // Create dots
+    cards.forEach((_, index) => {
+        const dot = document.createElement('button');
+        dot.classList.add('gallery-carousel-dot');
+        dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+        if (index === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+            goToSlide(index);
+            resetAutoRotate();
+        });
+        dotsContainer.appendChild(dot);
+    });
+
+    const dots = Array.from(dotsContainer.children);
+
+    function updateCarousel() {
+        // Move track
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+        // Update dots
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentIndex);
+        });
+    }
+
+    function goToSlide(index) {
+        currentIndex = index;
+        updateCarousel();
+    }
+
+    function nextSlide() {
+        currentIndex = (currentIndex + 1) % cards.length;
+        updateCarousel();
+    }
+
+    function prevSlide() {
+        currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+        updateCarousel();
+    }
+
+    function startAutoRotate() {
+        if (isHovered) return;
+        autoRotateInterval = setInterval(nextSlide, autoRotateDelay);
+    }
+
+    function stopAutoRotate() {
+        if (autoRotateInterval) {
+            clearInterval(autoRotateInterval);
+            autoRotateInterval = null;
+        }
+    }
+
+    function resetAutoRotate() {
+        stopAutoRotate();
+        if (!isHovered) {
+            startAutoRotate();
+        }
+    }
+
+    // Pause on hover
+    const container = track.closest('.gallery-carousel');
+    if (container) {
+        container.addEventListener('mouseenter', () => {
+            isHovered = true;
+            stopAutoRotate();
+        });
+
+        container.addEventListener('mouseleave', () => {
+            isHovered = false;
+            startAutoRotate();
+        });
+    }
+
+    // Touch/swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    track.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        stopAutoRotate();
+    }, { passive: true });
+
+    track.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        const diff = touchStartX - touchEndX;
+
+        if (Math.abs(diff) > 50) {
+            if (diff > 0) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+        }
+        resetAutoRotate();
+    }, { passive: true });
+
+    // Keyboard navigation
+    container.setAttribute('tabindex', '0');
+    container.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            prevSlide();
+            resetAutoRotate();
+        } else if (e.key === 'ArrowRight') {
+            nextSlide();
+            resetAutoRotate();
+        }
+    });
+
+    // Start auto-rotation
+    startAutoRotate();
 }

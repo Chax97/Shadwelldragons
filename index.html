@@ -23,6 +23,7 @@
                 <li><a href="community.html">Community</a></li>
                 <li><a href="legacy.html">Legacy</a></li>
                 <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="sponsorship.html">Sponsorship</a></li>
             </ul>
             <a href="#book" class="cta-button sticky-cta">Book Taster Session</a>
             <div class="hamburger">
@@ -39,9 +40,9 @@
             <div class="wave-overlay"></div>
         </div>
         <div class="hero-content">
-            <div class="hero-grid">
-                <!-- Left: Text Content -->
-                <div class="hero-left">
+            <div class="hero-stacked">
+                <!-- Text Content -->
+                <div class="hero-text-section">
                     <div class="hero-text">
                         <h2 class="hero-title">Join the Crew</h2>
                         <p class="hero-subtitle">Dragon boat racing for everyone in Shadwell, London. All ages, all abilities, all welcome.</p>
@@ -66,12 +67,11 @@
                     </div>
                 </div>
 
-                <!-- Right: Video Placeholder -->
-                <div class="hero-right">
+                <!-- Video Below -->
+                <div class="hero-video-section">
                     <div class="hero-video-card">
                         <video class="hero-video" autoplay muted loop playsinline>
-                            <!-- Replace src with your video file -->
-                            <source src="videos/highlights.mp4" type="video/mp4">
+                            <source src="videos/index_race.mp4" type="video/mp4">
                         </video>
                     </div>
                 </div>
@@ -85,34 +85,11 @@
             <div class="about-grid">
                 <div class="about-image">
                     <img src="images/index_action.JPG" alt="Dragon boat team in action" class="about-main-image">
-                    
-                    <div class="video-clip-placeholder">
-                        <video class="video-clip" autoplay muted loop playsinline>
-                            <source src="videos/index_race.mp4" type="video/mp4">
-                        </video>
-                    </div>
                 </div>
                 <div class="about-text">
                     <h3>Welcome to Shadwell Dragons</h3>
                     <p>We're a vibrant dragon boat racing team based in the heart of London's historic Shadwell Basin. Whether you're looking for a new fitness challenge, want to meet amazing people, or are searching for your next competitive sport - we've got a place for you.</p>
                     <p>Dragon boating is a spectacular team sport that combines power, rhythm, and camaraderie. In our boats, families paddle alongside fitness enthusiasts, beginners train with competitive athletes, and everyone pushes each other to be their best.</p>
-                    <div class="about-features">
-                        <div class="feature">
-                            <div class="feature-icon">🏆</div>
-                            <h4>Competitive Racing</h4>
-                            <p>Regular competitions across the UK and Europe</p>
-                        </div>
-                        <div class="feature">
-                            <div class="feature-icon">🌊</div>
-                            <h4>Social Paddling</h4>
-                            <p>Relaxed sessions focused on fun and fitness</p>
-                        </div>
-                        <div class="feature">
-                            <div class="feature-icon">👥</div>
-                            <h4>Community First</h4>
-                            <p>A welcoming team that feels like family</p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -151,31 +128,54 @@
         </div>
     </section>
 
-    <!-- Gallery Section -->
+    <!-- Gallery Section - Auto-rotating Carousel -->
     <section class="gallery-section">
         <div class="container">
             <h3 class="section-title">Life on the Water</h3>
-            <div class="gallery-grid">
-                <div class="gallery-item large">
-                    <img src="images/index_womens_team.JPG" alt="Race Day Action" class="gallery-image">
+            <div class="gallery-carousel">
+                <div class="gallery-carousel-container">
+                    <div class="gallery-carousel-track" data-gallery-carousel>
+                        <div class="gallery-carousel-card">
+                            <img src="images/index_womens_team.JPG" alt="Race Day Action">
+                            <div class="gallery-card-overlay">
+                                <span>BDA National Championships 2025</span>
+                            </div>
+                        </div>
+                        <div class="gallery-carousel-card">
+                            <img src="images/index_teamphoto1.jpg" alt="Team Photo">
+                            <div class="gallery-card-overlay">
+                                <span>BDA London 2024</span>
+                            </div>
+                        </div>
+                        <div class="gallery-carousel-card has-video">
+                            <video autoplay muted loop playsinline>
+                                <source src="videos/index_training.mp4" type="video/mp4">
+                            </video>
+                            <div class="gallery-card-overlay">
+                                <span>Training Session</span>
+                            </div>
+                        </div>
+                        <div class="gallery-carousel-card">
+                            <img src="images/index_teamphoto2.jpg" alt="Social Event">
+                            <div class="gallery-card-overlay">
+                                <span>BDA London 2025</span>
+                            </div>
+                        </div>
+                        <div class="gallery-carousel-card">
+                            <img src="images/index_raceresults.jpg" alt="Race Results">
+                            <div class="gallery-card-overlay">
+                                <span>BDA National Championships 2024 Race Results</span>
+                            </div>
+                        </div> 
+                        <div class="gallery-carousel-card">
+                            <img src="images/index_action.JPG" alt="Team on the Water">
+                            <div class="gallery-card-overlay">
+                                <span>Team on the Water</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="gallery-item">
-                    <img src="images/index_teamphoto1.jpg" alt="Team Photo" class="gallery-image">
-                </div>
-                <div class="gallery-item video">
-                    <video class="video-clip" autoplay muted loop playsinline>
-                        <source src="videos/index_training.mp4" type="video/mp4">
-                    </video>
-                </div>
-                <div class="gallery-item">
-                    <img src="images/index_teamphoto2.jpg" alt="Social Event" class="gallery-image">
-                </div>
-                <div class="gallery-item">
-                    <img src="images/index_raceresults.jpg" alt="Womens Team" class="gallery-image">
-                </div>
-                <div class="gallery-item">
-                    <img src="images/index_action.JPG" alt="Team on the Water" class="gallery-image">
-                </div>
+                <div class="gallery-carousel-dots"></div>
             </div>
         </div>
     </section>
@@ -206,7 +206,6 @@
                     <div class="type">Beginner Friendly</div>
                 </div>
             </div>
-            <p class="schedule-note">Location: Docklands Sailing and Watersports Centre, London E14 3QS</p>
         </div>
     </section>
 
@@ -273,10 +272,9 @@
                 </div>
 
                 <div class="map-container">
-                    <!-- Replace the src with your actual Google Maps embed URL -->
                     <iframe
                         class="google-map"
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d39739.42439588111!2d-0.04503227557427652!3d51.500115183555884!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487602bfc2086537%3A0x3ffd904052c9ef44!2sDocklands%20Sailing%20and%20Watersports%20Centre!5e0!3m2!1sen!2suk!4v1769987165875!5m2!1sen!2suk" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d39739.42439588111!2d-0.04503227557427652!3d51.500115183555884!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487602bfc2086537%3A0x3ffd904052c9ef44!2sDocklands%20Sailing%20and%20Watersports%20Centre!5e0!3m2!1sen!2suk!4v1769987165875!5m2!1sen!2suk"
                         width="100%"
                         height="100%"
                         style="border:0;"
