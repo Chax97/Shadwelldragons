@@ -888,7 +888,7 @@ body.index-page .getting-there {
     display: flex;
     gap: 4rem;
     width: max-content;
-    animation: scroll-sponsors 20s linear infinite;
+    animation: scroll-sponsors 30s linear infinite;
 }
 
 .sponsors-track:hover {
