@@ -433,3 +433,49 @@ function initGalleryCarousel() {
     // Start auto-rotation
     startAutoRotate();
 }
+
+// Floating CTA for mobile
+function initFloatingCTA() {
+    // Only show on mobile (968px and below)
+    if (window.innerWidth > 968) return;
+
+    // Check if already dismissed in this session
+    if (sessionStorage.getItem('ctaDismissed')) return;
+
+    // Get the book link - use index.html#book for non-index pages, #book for index
+    const isIndexPage = window.location.pathname.endsWith('index.html') ||
+                        window.location.pathname.endsWith('/') ||
+                        window.location.pathname === '';
+    const bookLink = isIndexPage ? '#book' : 'index.html#book';
+
+    // Create floating CTA container
+    const floatingCTA = document.createElement('div');
+    floatingCTA.className = 'floating-cta';
+    floatingCTA.innerHTML = `
+        <a href="${bookLink}" class="cta-link">Book Taster Session</a>
+        <button class="cta-close" aria-label="Close">×</button>
+    `;
+
+    document.body.appendChild(floatingCTA);
+
+    // Handle close button
+    const closeBtn = floatingCTA.querySelector('.cta-close');
+    closeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        floatingCTA.classList.add('dismissed');
+        sessionStorage.setItem('ctaDismissed', 'true');
+    });
+
+    // Handle CTA link click - close the floating CTA
+    const ctaLink = floatingCTA.querySelector('.cta-link');
+    ctaLink.addEventListener('click', () => {
+        floatingCTA.classList.add('dismissed');
+    });
+}
+
+// Initialize floating CTA when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFloatingCTA);
+} else {
+    initFloatingCTA();
+}

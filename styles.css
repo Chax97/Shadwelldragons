@@ -110,6 +110,10 @@ body.index-page .getting-there {
     align-items: center;
 }
 
+.logo a {
+    text-decoration: none;
+}
+
 .logo h1 {
     font-family: 'Poppins', sans-serif;
     font-size: 1.35rem;
@@ -2134,10 +2138,12 @@ body.index-page .sponsors-section {
 .hero-video-card {
     position: relative;
     width: 100%;
-    aspect-ratio: 16 / 10;
+    max-width: 400px;
+    margin: 0 auto;
+    aspect-ratio: 9 / 14;
     border-radius: var(--radius-xl);
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.1);
+    background: #0a0a0a;
     box-shadow:
         0 25px 80px rgba(0, 0, 0, 0.4),
         0 0 0 1px rgba(255, 255, 255, 0.15),
@@ -2750,13 +2756,15 @@ body.index-page .sponsors-section {
         justify-content: flex-start;
         align-items: stretch;
         gap: 0;
-        padding: 1.5rem 0;
+        padding: 0;
+        margin: 0;
         opacity: 0;
         visibility: hidden;
         transform: translateY(-20px);
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 998;
         overflow-y: auto;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
     }
 
     .nav-menu.active {
@@ -2884,8 +2892,65 @@ body.index-page .sponsors-section {
         transform: translateY(50%) rotate(-45deg);
     }
 
+    /* Hide navbar CTA on mobile */
     .cta-button {
         display: none;
+    }
+
+    /* Floating sticky CTA button - bottom right */
+    .floating-cta {
+        display: flex;
+        align-items: center;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 998;
+        gap: 8px;
+    }
+
+    .floating-cta .cta-link {
+        display: flex;
+        align-items: center;
+        padding: 0.875rem 1.25rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        border-radius: 50px;
+        white-space: nowrap;
+        background: var(--gradient-primary);
+        color: white;
+        text-decoration: none;
+        box-shadow: 0 4px 20px rgba(98, 93, 245, 0.4);
+        transition: all 0.3s ease;
+    }
+
+    .floating-cta .cta-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(98, 93, 245, 0.5);
+    }
+
+    .floating-cta .cta-close {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        background: var(--bg-dark);
+        border: none;
+        border-radius: 50%;
+        font-size: 1rem;
+        color: var(--text-dark);
+        cursor: pointer;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        transition: all 0.2s ease;
+    }
+
+    .floating-cta .cta-close:hover {
+        background: var(--text-dark);
+        color: white;
+    }
+
+    .floating-cta.dismissed {
+        display: none !important;
     }
 
     /* Mobile CTA in nav menu */
@@ -4337,15 +4402,21 @@ body.index-page .sponsors-section {
 }
 
 .three-col-gallery .gallery-item-new .placeholder-image {
-    min-height: 200px;
+    width: 100%;
+    height: 100%;
+    min-height: unset;
     margin: 0;
     border-radius: 0;
+}
+
+.three-col-gallery .gallery-item-new {
+    aspect-ratio: 4 / 3;
 }
 
 .three-col-gallery .gallery-item-new img,
 .three-col-gallery .gallery-item-new video {
     width: 100%;
-    height: 200px;
+    height: 100%;
     object-fit: cover;
     display: block;
 }
@@ -4449,11 +4520,18 @@ body.index-page .sponsors-section {
     }
 
     /* Alternating image/video - mobile */
+    .alternating-image {
+        aspect-ratio: 16 / 9;
+    }
+
     .alternating-image .placeholder-image,
     .alternating-image img,
     .alternating-image video,
     .alternating-video video {
-        min-height: 220px;
+        width: 100%;
+        height: 100%;
+        min-height: unset;
+        object-fit: cover;
     }
 
     /* Alternating row padding - mobile */
@@ -4709,10 +4787,17 @@ body.index-page .sponsors-section {
         font-size: 0.95rem;
     }
 
+    .alternating-image {
+        aspect-ratio: 4 / 3;
+    }
+
     .alternating-image img,
     .alternating-image video {
-        min-height: 200px;
-        max-height: 250px;
+        width: 100%;
+        height: 100%;
+        min-height: unset;
+        max-height: unset;
+        object-fit: cover;
     }
 
     /* Values - very small phones */
@@ -4769,9 +4854,15 @@ body.index-page .sponsors-section {
     }
 
     /* Gallery carousel - very small phones */
+    .gallery-carousel-card {
+        aspect-ratio: 4 / 3;
+    }
+
     .gallery-carousel-card img,
     .gallery-carousel-card video {
-        height: 200px;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
     .gallery-card-overlay span {
@@ -4890,9 +4981,15 @@ body.index-page .sponsors-section {
     }
 
     /* Three column gallery - very small phones */
+    .three-col-gallery .gallery-item-new {
+        aspect-ratio: 16 / 9;
+    }
+
     .three-col-gallery .gallery-item-new img,
     .three-col-gallery .gallery-item-new video {
-        height: 160px;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 }
 
@@ -4967,7 +5064,9 @@ body.index-page .sponsors-section {
 
     .gallery-carousel-card img,
     .gallery-carousel-card video {
-        height: 180px;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
     .map-container {
@@ -4978,9 +5077,16 @@ body.index-page .sponsors-section {
         height: 180px;
     }
 
+    .alternating-image {
+        aspect-ratio: 4 / 3;
+    }
+
     .alternating-image img,
     .alternating-image video {
-        min-height: 180px;
-        max-height: 220px;
+        width: 100%;
+        height: 100%;
+        min-height: unset;
+        max-height: unset;
+        object-fit: cover;
     }
 }
