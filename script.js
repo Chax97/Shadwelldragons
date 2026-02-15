@@ -45,35 +45,157 @@ window.addEventListener('scroll', () => {
 // Form submission handling
 const bookForm = document.querySelector('.book-form');
 if (bookForm) {
-    bookForm.addEventListener('submit', (e) => {
+    bookForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        alert('Thank you for your interest! We will contact you shortly to confirm your taster session.');
-        bookForm.reset();
+
+        const submitBtn = bookForm.querySelector('button[type="submit"]');
+        const formStatus = bookForm.querySelector('.form-status');
+        const originalBtnText = submitBtn.textContent;
+
+        // Disable button and show loading state
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+
+        // Collect form data
+        const formData = {
+            name: bookForm.querySelector('[name="name"]').value,
+            email: bookForm.querySelector('[name="email"]').value,
+            phone: bookForm.querySelector('[name="phone"]').value,
+            session: bookForm.querySelector('[name="session"]').value,
+            message: bookForm.querySelector('[name="message"]').value,
+            source: 'website-booking'
+        };
+
+        try {
+            const response = await fetch('/.netlify/functions/submit-form', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                // Success
+                formStatus.style.display = 'block';
+                formStatus.className = 'form-status success';
+                formStatus.textContent = 'Thank you! We will contact you shortly to confirm your taster session.';
+                bookForm.reset();
+            } else {
+                throw new Error(result.error || 'Failed to submit form');
+            }
+        } catch (error) {
+            console.error('Form submission error:', error);
+
+            // Create mailto fallback
+            const subject = encodeURIComponent(`Taster Session Booking - ${formData.session}`);
+            const body = encodeURIComponent(
+                `Name: ${formData.name}\n` +
+                `Email: ${formData.email}\n` +
+                `Phone: ${formData.phone}\n` +
+                `Preferred Session: ${formData.session}\n` +
+                `Message: ${formData.message || 'N/A'}`
+            );
+            const mailtoLink = `mailto:hello@shadwelldragons.com?subject=${subject}&body=${body}`;
+
+            formStatus.style.display = 'block';
+            formStatus.className = 'form-status error';
+            formStatus.innerHTML = `Form submission unavailable. <a href="${mailtoLink}" style="color: #fca5a5; text-decoration: underline;">Click here to email us directly</a> with your details.`;
+        } finally {
+            // Re-enable button
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalBtnText;
+
+            // Hide status message after 10 seconds (longer for error with link)
+            setTimeout(() => {
+                formStatus.style.display = 'none';
+            }, 10000);
+        }
     });
 }
 
 // Animation on scroll
+const isMobile = window.innerWidth <= 768;
 const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -100px 0px'
+    threshold: isMobile ? 0.05 : 0.1,
+    rootMargin: isMobile ? '0px 0px -20px 0px' : '0px 0px -50px 0px'
 };
 
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
+            entry.target.classList.add('animate-in');
         }
     });
 }, observerOptions);
 
-// Observe elements for animation
-document.querySelectorAll('.info-card, .schedule-card, .about-text').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(30px)';
-    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    observer.observe(el);
-});
+// Elements to animate on all pages
+const animateElements = [
+    // Home page elements
+    '.info-card',
+    '.schedule-card',
+    '.about-text',
+    // Page headers
+    '.page-header h2',
+    '.page-header p',
+    // Content sections
+    '.content-main h3',
+    '.content-main h4',
+    '.content-main p',
+    '.sidebar-card',
+    // Timeline elements
+    '.timeline-item',
+    // Cards
+    '.pricing-card',
+    '.special-card',
+    '.benefit-card',
+    '.feature-card',
+    '.package-card',
+    '.profile-card-new',
+    '.story-card',
+    // Section titles
+    '.section-title',
+    // CTA sections
+    '.cta-section h3',
+    '.cta-section p',
+    '.cta-section .btn',
+    // Gallery items
+    '.gallery-item-new',
+    '.inline-gallery-item',
+    // Other elements
+    '.included-section',
+    '.alternating-content',
+    '.corporate-inline-media'
+];
+
+// Initialize animations
+function initAnimations() {
+    let delay = 0;
+
+    animateElements.forEach(selector => {
+        document.querySelectorAll(selector).forEach((el, index) => {
+            // Skip if already has animation class
+            if (el.classList.contains('animate-ready')) return;
+
+            el.classList.add('animate-ready');
+
+            // Add staggered delay for grouped elements
+            const staggerDelay = index * 0.1;
+            el.style.transitionDelay = `${staggerDelay}s`;
+
+            observer.observe(el);
+        });
+    });
+}
+
+// Run animations when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAnimations);
+} else {
+    initAnimations();
+}
 
 // Carousel functionality
 class Carousel {

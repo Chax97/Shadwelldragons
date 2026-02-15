@@ -759,6 +759,10 @@ body.index-page .getting-there {
     display: inline-block;
 }
 
+.schedule-card .type + .type {
+    margin-top: 0.5rem;
+}
+
 .schedule-note {
     text-align: center;
     font-size: 1.05rem;
@@ -868,6 +872,43 @@ body.index-page .getting-there {
     font-size: 1.05rem;
 }
 
+.book-form button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.form-status {
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    text-align: center;
+    margin-top: 1rem;
+    animation: fadeIn 0.3s ease;
+}
+
+.form-status.success {
+    background: rgba(34, 197, 94, 0.2);
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    color: #86efac;
+}
+
+.form-status.error {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #fca5a5;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* Footer - Modern Multi-Column */
 /* ==========================================
    SPONSOR LOGOS MARQUEE SECTION
@@ -945,6 +986,135 @@ body.index-page .sponsors-section {
     background: rgba(248, 250, 252, 0.95);
 }
 
+/* ===== Scroll Animations ===== */
+.animate-ready {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.animate-ready.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Page header animations */
+.page-header h2.animate-ready {
+    transform: translateY(-20px);
+}
+
+.page-header p.animate-ready {
+    transform: translateY(20px);
+    transition-delay: 0.15s;
+}
+
+/* Timeline item animations */
+.timeline-item.animate-ready {
+    transform: translateX(-30px);
+}
+
+.timeline-item.image-left.animate-ready {
+    transform: translateX(30px);
+}
+
+.timeline-item.animate-in {
+    transform: translateX(0);
+}
+
+/* Card animations with scale */
+.pricing-card.animate-ready,
+.special-card.animate-ready,
+.sidebar-card.animate-ready {
+    transform: translateY(40px) scale(0.95);
+}
+
+.pricing-card.animate-in,
+.special-card.animate-in,
+.sidebar-card.animate-in {
+    transform: translateY(0) scale(1);
+}
+
+/* CTA section animation */
+.cta-section h3.animate-ready,
+.cta-section p.animate-ready {
+    transform: translateY(20px);
+}
+
+.cta-section .btn.animate-ready {
+    transform: translateY(20px) scale(0.9);
+}
+
+.cta-section .btn.animate-in {
+    transform: translateY(0) scale(1);
+}
+
+/* Gallery item animations */
+.gallery-item-new.animate-ready,
+.inline-gallery-item.animate-ready {
+    transform: scale(0.9);
+}
+
+.gallery-item-new.animate-in,
+.inline-gallery-item.animate-in {
+    transform: scale(1);
+}
+
+/* Content fade in from sides */
+.alternating-content.animate-ready:nth-child(odd) {
+    transform: translateX(-40px);
+}
+
+.alternating-content.animate-ready:nth-child(even) {
+    transform: translateX(40px);
+}
+
+.alternating-content.animate-in {
+    transform: translateX(0);
+}
+
+/* Mobile-specific animations - faster and subtler */
+@media (max-width: 768px) {
+    .animate-ready {
+        transform: translateY(20px);
+        transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+    }
+
+    .timeline-item.animate-ready,
+    .timeline-item.image-left.animate-ready {
+        transform: translateY(20px);
+    }
+
+    .pricing-card.animate-ready,
+    .special-card.animate-ready,
+    .sidebar-card.animate-ready {
+        transform: translateY(25px) scale(0.98);
+    }
+
+    .alternating-content.animate-ready:nth-child(odd),
+    .alternating-content.animate-ready:nth-child(even) {
+        transform: translateY(20px);
+    }
+
+    /* Reduce stagger delay on mobile for snappier feel */
+    .animate-ready {
+        transition-delay: 0s !important;
+    }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .animate-ready {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .animate-ready.animate-in {
+        opacity: 1;
+        transform: none;
+    }
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .sponsors-section {
@@ -1015,7 +1185,7 @@ body.index-page .sponsors-section {
 
 .footer-grid {
     display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
     gap: 4rem;
     margin-bottom: 4rem;
 }
@@ -1061,6 +1231,37 @@ body.index-page .sponsors-section {
 .footer-col p {
     font-size: 0.95rem;
     line-height: 1.7;
+}
+
+.footer-logo {
+    max-width: 150px;
+    height: auto;
+    margin-bottom: 1rem;
+}
+
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.social-icon:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+.social-icon svg {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    border-radius: 8px;
+    padding: 6px;
+    fill: white;
 }
 
 .footer-bottom {
@@ -1599,14 +1800,34 @@ body.index-page .sponsors-section {
 
 .timeline-image {
     width: 100%;
-    max-width: 280px;
+    max-width: 350px;
 }
 
 .timeline-image .placeholder-image {
-    height: 180px;
+    height: 280px;
     border-radius: 12px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.timeline-image .placeholder-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.timeline-image.fit-contain-wrapper {
+    max-width: 450px;
+}
+
+.timeline-image .placeholder-image.fit-contain {
+    height: auto;
+}
+
+.timeline-image .placeholder-image.fit-contain img {
+    height: auto;
+    display: block;
 }
 
 .timeline-image .placeholder-image:hover {
@@ -2474,9 +2695,16 @@ body.index-page .sponsors-section {
 }
 
 .corporate-inline-media .placeholder-image {
-    min-height: 250px;
     margin: 0;
     border-radius: 15px;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+}
+
+.corporate-inline-media .placeholder-image span {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 .corporate-inline-media img {
@@ -2495,17 +2723,43 @@ body.index-page .sponsors-section {
 }
 
 .package-media .placeholder-image {
-    min-height: 150px;
     margin: 0;
     border-radius: 10px;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+}
+
+.package-media .placeholder-image span {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.package-media .placeholder-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .package-media.video {
     background: linear-gradient(135deg, var(--light-blue) 0%, #C5E4F3 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 150px;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+}
+
+/* Handle images directly in package-media (without placeholder-image wrapper) */
+.package-media > span {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.package-media > span img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .package-media .video-clip {
@@ -2554,6 +2808,7 @@ body.index-page .sponsors-section {
     overflow: hidden;
     position: relative;
     transition: all 0.3s ease;
+    aspect-ratio: 4 / 3;
 }
 
 .inline-gallery-item:hover {
@@ -2562,9 +2817,23 @@ body.index-page .sponsors-section {
 }
 
 .inline-gallery-item .placeholder-image {
-    min-height: 120px;
     margin: 0;
     border-radius: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.inline-gallery-item .placeholder-image span {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.inline-gallery-item .placeholder-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .inline-gallery-item.video {
@@ -3116,8 +3385,17 @@ body.index-page .sponsors-section {
     }
 
     .timeline-with-images .timeline-item {
-        display: block;
+        display: flex;
+        flex-direction: column;
         padding-left: 80px;
+    }
+
+    .timeline-with-images .timeline-item.image-left .timeline-image {
+        order: 2;
+    }
+
+    .timeline-with-images .timeline-item.image-left .timeline-content {
+        order: 1;
     }
 
     .timeline-with-images .timeline-marker {
@@ -3168,11 +3446,6 @@ body.index-page .sponsors-section {
     .content-main h3,
     .pricing-intro h3 {
         font-size: 2rem;
-    }
-
-    /* Corporate image - tablet */
-    .corporate-inline-media .placeholder-image {
-        min-height: 200px;
     }
 
     /* Card padding - tablet */
@@ -3394,10 +3667,6 @@ body.index-page .sponsors-section {
 
     .about-image {
         order: 2;
-    }
-
-    .corporate-inline-media .placeholder-image {
-        min-height: 180px;
     }
 
     /* Font sizes - mobile */
@@ -4421,6 +4690,39 @@ body.index-page .sponsors-section {
     display: block;
 }
 
+/* Upcoming events section */
+.upcoming-events-section {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, var(--gray-50) 0%, var(--light-blue) 100%);
+    text-align: center;
+}
+
+.upcoming-events-section .section-title {
+    margin-bottom: 2rem;
+}
+
+/* Events video container - large portrait video */
+.events-video-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 1.5rem 0;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+}
+
+.events-video-container.centered {
+    margin: 0 auto;
+}
+
+.events-video {
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    object-fit: cover;
+    display: block;
+    background: var(--bg-dark);
+}
+
 /* Responsive for community page */
 @media (max-width: 968px) {
     .community-hero-banner {
@@ -4433,12 +4735,14 @@ body.index-page .sponsors-section {
     }
 
     .alternating-row {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column-reverse;
         gap: 2rem;
     }
 
     .alternating-row.reverse {
         direction: ltr;
+        flex-direction: column-reverse;
     }
 
     .profiles-grid {
@@ -4541,6 +4845,11 @@ body.index-page .sponsors-section {
 
     .community-intro {
         padding: 3rem 1rem;
+    }
+
+    /* Events video - mobile */
+    .events-video-container {
+        max-width: 100%;
     }
 }
 
