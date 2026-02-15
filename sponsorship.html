@@ -149,69 +149,20 @@
                         <input type="email" name="email" placeholder="Email Address" required>
                         <select name="level" required>
                             <option value="">Sponsorship Level</option>
-                            <option value="platinum">Platinum - £5,000/year</option>
-                            <option value="gold">Gold - £3,000/year</option>
-                            <option value="silver">Silver - £1,000/year</option>
-                            <option value="community">Community Friend - £500+</option>
-                            <option value="custom">Custom Package</option>
+                            <option value="Platinum">Platinum - £5,000/year</option>
+                            <option value="Gold">Gold - £3,000/year</option>
+                            <option value="Silver">Silver - £1,000/year</option>
+                            <option value="Community Friend">Community Friend - £500+</option>
+                            <option value="Custom">Custom Package</option>
                         </select>
                     </div>
                     <textarea name="message" placeholder="Tell us about your company and sponsorship goals" rows="4"></textarea>
                     <button type="submit" class="btn btn-primary">Send Enquiry</button>
+                    <div class="form-status" style="display: none;"></div>
                 </form>
-                <div id="sponsorFormMessage" style="margin-top: 1rem; display: none;"></div>
             </div>
         </div>
     </section>
-
-    <script>
-    document.getElementById('sponsorshipForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const formData = new FormData(e.target);
-        const submitButton = e.target.querySelector('button[type="submit"]');
-        const messageDiv = document.getElementById('sponsorFormMessage');
-        
-        // Disable button and show loading state
-        submitButton.disabled = true;
-        submitButton.textContent = 'Sending...';
-        
-        const data = {
-            name: formData.get('name'),
-            company: formData.get('company'),
-            email: formData.get('email'),
-            level: formData.get('level'),
-            message: formData.get('message'),
-            source: 'sponsorship-page'
-        };
-        
-        try {
-            const response = await fetch('/.netlify/functions/submit-sponsorship', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-            
-            if (response.ok) {
-                messageDiv.style.display = 'block';
-                messageDiv.style.color = '#4CAF50';
-                messageDiv.textContent = '✓ Thank you for your interest! We\'ll be in touch soon to discuss sponsorship opportunities.';
-                e.target.reset();
-            } else {
-                throw new Error('Submission failed');
-            }
-        } catch (error) {
-            messageDiv.style.display = 'block';
-            messageDiv.style.color = '#f44336';
-            messageDiv.textContent = '✗ Something went wrong. Please email us at hello@shadwelldragons.co.uk';
-        } finally {
-            submitButton.disabled = false;
-            submitButton.textContent = 'Send Enquiry';
-        }
-    });
-    </script>
 
     <!-- Footer -->
     <footer class="footer">

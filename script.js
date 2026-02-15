@@ -42,32 +42,50 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Form submission handling
-const bookForm = document.querySelector('.book-form');
-if (bookForm) {
-    bookForm.addEventListener('submit', async (e) => {
+// Form submission handling - supports booking and sponsorship forms
+document.querySelectorAll('.book-form').forEach(form => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const submitBtn = bookForm.querySelector('button[type="submit"]');
-        const formStatus = bookForm.querySelector('.form-status');
+        const submitBtn = form.querySelector('button[type="submit"]');
+        // Support both inline .form-status and external message div
+        let formStatus = form.querySelector('.form-status') || document.getElementById('sponsorFormMessage');
         const originalBtnText = submitBtn.textContent;
+
+        // Determine form type
+        const isSponsorship = form.id === 'sponsorshipForm';
 
         // Disable button and show loading state
         submitBtn.disabled = true;
         submitBtn.textContent = 'Submitting...';
 
-        // Collect form data
-        const formData = {
-            name: bookForm.querySelector('[name="name"]').value,
-            email: bookForm.querySelector('[name="email"]').value,
-            phone: bookForm.querySelector('[name="phone"]').value,
-            session: bookForm.querySelector('[name="session"]').value,
-            message: bookForm.querySelector('[name="message"]').value,
-            source: 'website-booking'
-        };
+        // Collect form data based on form type
+        let formData;
+        let endpoint;
+        if (isSponsorship) {
+            formData = {
+                name: form.querySelector('[name="name"]').value,
+                company: form.querySelector('[name="company"]')?.value || '',
+                email: form.querySelector('[name="email"]').value,
+                level: form.querySelector('[name="level"]')?.value || '',
+                message: form.querySelector('[name="message"]')?.value || '',
+                source: 'website-sponsorship'
+            };
+            endpoint = '/.netlify/functions/submit-sponsorship';
+        } else {
+            formData = {
+                name: form.querySelector('[name="name"]').value,
+                email: form.querySelector('[name="email"]').value,
+                phone: form.querySelector('[name="phone"]')?.value || '',
+                session: form.querySelector('[name="session"]')?.value || '',
+                message: form.querySelector('[name="message"]')?.value || '',
+                source: 'website-booking'
+            };
+            endpoint = '/.netlify/functions/submit-form';
+        }
 
         try {
-            const response = await fetch('/.netlify/functions/submit-form', {
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -81,8 +99,10 @@ if (bookForm) {
                 // Success
                 formStatus.style.display = 'block';
                 formStatus.className = 'form-status success';
-                formStatus.textContent = 'Thank you! We will contact you shortly to confirm your taster session.';
-                bookForm.reset();
+                formStatus.textContent = isSponsorship
+                    ? 'Thank you for your interest! We will contact you shortly to discuss sponsorship opportunities.'
+                    : 'Thank you! We will contact you shortly to confirm your taster session.';
+                form.reset();
             } else {
                 throw new Error(result.error || 'Failed to submit form');
             }
@@ -90,14 +110,28 @@ if (bookForm) {
             console.error('Form submission error:', error);
 
             // Create mailto fallback
-            const subject = encodeURIComponent(`Taster Session Booking - ${formData.session}`);
-            const body = encodeURIComponent(
-                `Name: ${formData.name}\n` +
-                `Email: ${formData.email}\n` +
-                `Phone: ${formData.phone}\n` +
-                `Preferred Session: ${formData.session}\n` +
-                `Message: ${formData.message || 'N/A'}`
-            );
+            let subject, body;
+            if (isSponsorship) {
+                const company = form.querySelector('[name="company"]')?.value || '';
+                const level = form.querySelector('[name="level"]')?.value || '';
+                subject = encodeURIComponent(`Sponsorship Enquiry - ${level}`);
+                body = encodeURIComponent(
+                    `Name: ${formData.name}\n` +
+                    `Company: ${company}\n` +
+                    `Email: ${formData.email}\n` +
+                    `Sponsorship Level: ${level}\n` +
+                    `Message: ${formData.message || 'N/A'}`
+                );
+            } else {
+                subject = encodeURIComponent(`Taster Session Booking - ${formData.session}`);
+                body = encodeURIComponent(
+                    `Name: ${formData.name}\n` +
+                    `Email: ${formData.email}\n` +
+                    `Phone: ${formData.phone}\n` +
+                    `Preferred Session: ${formData.session}\n` +
+                    `Message: ${formData.message || 'N/A'}`
+                );
+            }
             const mailtoLink = `mailto:hello@shadwelldragons.com?subject=${subject}&body=${body}`;
 
             formStatus.style.display = 'block';
@@ -114,7 +148,7 @@ if (bookForm) {
             }, 10000);
         }
     });
-}
+});
 
 // Animation on scroll
 const isMobile = window.innerWidth <= 768;
