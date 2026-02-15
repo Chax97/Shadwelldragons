@@ -134,20 +134,20 @@
         </div>
     </section>
 
-    <!-- Contact Section -->
+   <!-- Contact Section -->
     <section class="book-section" id="contact-sponsor">
         <div class="container">
             <div class="book-content">
                 <h3>Interested in Sponsoring?</h3>
                 <p>Get in touch to discuss how we can work together.</p>
-                <form class="book-form">
+                <form class="book-form" id="sponsorshipForm">
                     <div class="form-row">
-                        <input type="text" placeholder="Your Name" required>
-                        <input type="text" placeholder="Company Name" required>
+                        <input type="text" name="name" placeholder="Your Name" required>
+                        <input type="text" name="company" placeholder="Company Name" required>
                     </div>
                     <div class="form-row">
-                        <input type="email" placeholder="Email Address" required>
-                        <select required>
+                        <input type="email" name="email" placeholder="Email Address" required>
+                        <select name="level" required>
                             <option value="">Sponsorship Level</option>
                             <option value="platinum">Platinum - £5,000/year</option>
                             <option value="gold">Gold - £3,000/year</option>
@@ -156,12 +156,62 @@
                             <option value="custom">Custom Package</option>
                         </select>
                     </div>
-                    <textarea placeholder="Tell us about your company and sponsorship goals" rows="4"></textarea>
+                    <textarea name="message" placeholder="Tell us about your company and sponsorship goals" rows="4"></textarea>
                     <button type="submit" class="btn btn-primary">Send Enquiry</button>
                 </form>
+                <div id="sponsorFormMessage" style="margin-top: 1rem; display: none;"></div>
             </div>
         </div>
     </section>
+
+    <script>
+    document.getElementById('sponsorshipForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target);
+        const submitButton = e.target.querySelector('button[type="submit"]');
+        const messageDiv = document.getElementById('sponsorFormMessage');
+        
+        // Disable button and show loading state
+        submitButton.disabled = true;
+        submitButton.textContent = 'Sending...';
+        
+        const data = {
+            name: formData.get('name'),
+            company: formData.get('company'),
+            email: formData.get('email'),
+            level: formData.get('level'),
+            message: formData.get('message'),
+            source: 'sponsorship-page'
+        };
+        
+        try {
+            const response = await fetch('/.netlify/functions/submit-sponsorship', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            
+            if (response.ok) {
+                messageDiv.style.display = 'block';
+                messageDiv.style.color = '#4CAF50';
+                messageDiv.textContent = '✓ Thank you for your interest! We\'ll be in touch soon to discuss sponsorship opportunities.';
+                e.target.reset();
+            } else {
+                throw new Error('Submission failed');
+            }
+        } catch (error) {
+            messageDiv.style.display = 'block';
+            messageDiv.style.color = '#f44336';
+            messageDiv.textContent = '✗ Something went wrong. Please email us at hello@shadwelldragons.co.uk';
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Send Enquiry';
+        }
+    });
+    </script>
 
     <!-- Footer -->
     <footer class="footer">
