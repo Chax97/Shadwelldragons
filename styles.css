@@ -3675,12 +3675,32 @@ body.index-page .sponsors-section {
     }
 
     .page-header {
-        padding: 1.5rem 0;
+        padding: 3rem 1rem;
         margin-top: 70px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 120px;
+    }
+
+    .page-header .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 
     .page-header h2 {
-        font-size: 2rem;
+        font-size: 2.5rem;
+        text-align: center;
+        margin: 0 auto 0.5rem;
+    }
+
+    .page-header p {
+        text-align: center;
+        margin: 0;
     }
 
     .about-text h3 {
@@ -3719,6 +3739,16 @@ body.index-page .sponsors-section {
     .footer-grid {
         grid-template-columns: 1fr;
         gap: 2rem;
+    }
+
+    .footer-col:first-child {
+        text-align: center;
+    }
+
+    .footer-logo {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .included-item {
@@ -4916,17 +4946,20 @@ body.index-page .sponsors-section {
     }
 
     /* Page header - very small phones */
-    .page-header h2 {
-        font-size: 1.5rem;
+    .page-header {
+        padding: 2.5rem 1rem;
+        margin-top: 60px;
+        min-height: 100px;
     }
 
-    .page-header {
-        padding: 1.25rem 0;
-        margin-top: 60px;
+    .page-header h2 {
+        font-size: 2rem;
+        margin: 0 auto 0.5rem;
     }
 
     .page-header p {
-        font-size: 0.95rem;
+        font-size: 1rem;
+        margin: 0;
     }
 
     /* About section - very small phones */
@@ -5324,9 +5357,18 @@ body.index-page .sponsors-section {
         font-size: 0.9rem;
     }
 
-    .section-title,
-    .page-header h2 {
+    .section-title {
         font-size: 1.35rem;
+    }
+
+    .page-header {
+        padding: 2rem 1rem;
+        min-height: 90px;
+    }
+
+    .page-header h2 {
+        font-size: 1.75rem;
+        margin: 0 auto 0.5rem;
     }
 
     .about-text h3,
