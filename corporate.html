@@ -40,7 +40,6 @@
     <section class="page-header">
         <div class="container">
             <h2>Corporate Team Building</h2>
-            <p>Transform your team through the power of dragon boat racing</p>
         </div>
     </section>
 
@@ -126,7 +125,7 @@
                     <div class="sidebar-card highlight">
                         <h4>📞 Get a Custom Quote</h4>
                         <p>Every team is different. Contact us to discuss your objectives and we'll create the perfect experience.</p>
-                        <a href="index.html#book" class="btn btn-primary">Contact Us</a>
+                        <a href="#contact-corporate" class="btn btn-primary">Contact Us</a>
                     </div>
 
                     <div class="sidebar-card">
@@ -169,12 +168,35 @@
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
+    <!-- Contact / Enquiry Form -->
+    <section class="book-section" id="contact-corporate">
         <div class="container">
-            <h3>Ready to Book Your Corporate Event?</h3>
-            <p>Let's create an unforgettable team-building experience for your organization</p>
-            <a href="index.html#book" class="btn btn-primary">Get a Quote</a>
+            <div class="book-content">
+                <h3>Get a Custom Quote</h3>
+                <p>Tell us about your team and we'll put together the perfect experience.</p>
+                <form class="book-form" id="corporateForm">
+                    <div class="form-row">
+                        <input type="text" name="name" placeholder="Your Name" required>
+                        <input type="text" name="company" placeholder="Company Name" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="email" name="email" placeholder="Email Address" required>
+                        <input type="tel" name="phone" placeholder="Phone Number">
+                    </div>
+                    <div class="form-row">
+                        <select name="package" required>
+                            <option value="">Select Package</option>
+                            <option value="Half-Day">Half-Day Experience (3 hours)</option>
+                            <option value="Full-Day">Full-Day Challenge (6 hours)</option>
+                            <option value="Custom">Custom / Not Sure Yet</option>
+                        </select>
+                        <input type="text" name="team_size" placeholder="Approximate Team Size">
+                    </div>
+                    <textarea name="message" placeholder="Tell us about your event — preferred dates, objectives, or anything else we should know" rows="4"></textarea>
+                    <button type="submit" class="btn btn-primary">Send Enquiry</button>
+                    <div class="form-status" style="display: none;"></div>
+                </form>
+            </div>
         </div>
     </section>
 

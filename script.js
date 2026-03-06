@@ -54,6 +54,7 @@ document.querySelectorAll('.book-form').forEach(form => {
 
         // Determine form type
         const isSponsorship = form.id === 'sponsorshipForm';
+        const isCorporate = form.id === 'corporateForm';
 
         // Disable button and show loading state
         submitBtn.disabled = true;
@@ -72,6 +73,18 @@ document.querySelectorAll('.book-form').forEach(form => {
                 source: 'website-sponsorship'
             };
             endpoint = '/.netlify/functions/submit-sponsorship';
+        } else if (isCorporate) {
+            formData = {
+                name: form.querySelector('[name="name"]').value,
+                company: form.querySelector('[name="company"]')?.value || '',
+                email: form.querySelector('[name="email"]').value,
+                phone: form.querySelector('[name="phone"]')?.value || '',
+                package: form.querySelector('[name="package"]')?.value || '',
+                team_size: form.querySelector('[name="team_size"]')?.value || '',
+                message: form.querySelector('[name="message"]')?.value || '',
+                source: 'website-corporate'
+            };
+            endpoint = '/.netlify/functions/submit-corporate';
         } else {
             formData = {
                 name: form.querySelector('[name="name"]').value,
@@ -101,6 +114,8 @@ document.querySelectorAll('.book-form').forEach(form => {
                 formStatus.className = 'form-status success';
                 formStatus.textContent = isSponsorship
                     ? 'Thank you for your interest! We will contact you shortly to discuss sponsorship opportunities.'
+                    : isCorporate
+                    ? 'Thank you! We will be in touch shortly to discuss your corporate event.'
                     : 'Thank you! We will contact you shortly to confirm your taster session.';
                 form.reset();
             } else {
@@ -120,6 +135,17 @@ document.querySelectorAll('.book-form').forEach(form => {
                     `Company: ${company}\n` +
                     `Email: ${formData.email}\n` +
                     `Sponsorship Level: ${level}\n` +
+                    `Message: ${formData.message || 'N/A'}`
+                );
+            } else if (isCorporate) {
+                subject = encodeURIComponent(`Corporate Event Enquiry - ${formData.package}`);
+                body = encodeURIComponent(
+                    `Name: ${formData.name}\n` +
+                    `Company: ${formData.company}\n` +
+                    `Email: ${formData.email}\n` +
+                    `Phone: ${formData.phone}\n` +
+                    `Package: ${formData.package}\n` +
+                    `Team Size: ${formData.team_size || 'N/A'}\n` +
                     `Message: ${formData.message || 'N/A'}`
                 );
             } else {
@@ -171,9 +197,6 @@ const animateElements = [
     '.info-card',
     '.schedule-card',
     '.about-text',
-    // Page headers
-    '.page-header h2',
-    '.page-header p',
     // Content sections
     '.content-main h3',
     '.content-main h4',
@@ -634,4 +657,147 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initFloatingCTA);
 } else {
     initFloatingCTA();
+}
+
+// =============================================
+// LEGACY PAGE
+// =============================================
+if (document.body.classList.contains('legacy-page')) {
+
+    // Hero bg zoom
+    const heroBg = document.getElementById('hero-bg');
+    if (heroBg) heroBg.classList.add('loaded');
+
+    // Section fade-in
+    const storySections = document.querySelectorAll('.story-section');
+    const leaderCards   = document.querySelectorAll('.leader-card');
+    const finalSection  = document.querySelector('.legacy-final');
+
+    const sectionObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
+    }, { threshold: 0.18 });
+    storySections.forEach(s => sectionObserver.observe(s));
+
+    const cardObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
+    }, { threshold: 0.2 });
+    leaderCards.forEach(c => cardObserver.observe(c));
+
+    const leadershipSection = document.querySelector('.leadership-section');
+    const leadershipObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
+    }, { threshold: 0.15 });
+    if (leadershipSection) leadershipObserver.observe(leadershipSection);
+
+    const finalObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
+    }, { threshold: 0.15 });
+    if (finalSection) finalObserver.observe(finalSection);
+
+    // Decorative SVG path — Catmull-Rom through text panel centres
+    function catmullRomPath(pts) {
+        if (pts.length < 2) return '';
+        let d = `M ${pts[0][0]},${pts[0][1]}`;
+        for (let i = 0; i < pts.length - 1; i++) {
+            const p0 = pts[Math.max(0, i - 1)];
+            const p1 = pts[i];
+            const p2 = pts[i + 1];
+            const p3 = pts[Math.min(pts.length - 1, i + 2)];
+            const tension = 0.4;
+            const cp1x = p1[0] + (p2[0] - p0[0]) * tension;
+            const cp1y = p1[1] + (p2[1] - p0[1]) * tension;
+            const cp2x = p2[0] - (p3[0] - p1[0]) * tension;
+            const cp2y = p2[1] - (p3[1] - p1[1]) * tension;
+            d += ` C ${cp1x.toFixed(1)},${cp1y.toFixed(1)} ${cp2x.toFixed(1)},${cp2y.toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
+        }
+        return d;
+    }
+
+    function buildStoryPath() {
+        const wrapper  = document.getElementById('legacy-story');
+        const svgEl    = document.getElementById('story-svg');
+        const pathEl   = document.getElementById('story-line');
+        const circleEl = document.getElementById('story-circle');
+        if (!wrapper || !svgEl || !pathEl || !circleEl) return;
+
+        const W = wrapper.offsetWidth;
+        const H = wrapper.offsetHeight;
+
+        svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+        svgEl.setAttribute('width',  W);
+        svgEl.setAttribute('height', H);
+
+        // Anchor points through text panel centres
+        const anchors = [[W * 0.5, 0]];
+        wrapper.querySelectorAll('.story-section').forEach(section => {
+            const textPanel = section.querySelector('.story-text-panel');
+            if (!textPanel) return;
+            let el = textPanel, ox = 0, oy = 0;
+            while (el && el !== wrapper) { ox += el.offsetLeft; oy += el.offsetTop; el = el.offsetParent; }
+            anchors.push([ox + textPanel.offsetWidth * 0.5, oy + textPanel.offsetHeight * 0.5]);
+        });
+        anchors.push([W * 0.5, H]);
+
+        pathEl.setAttribute('d', catmullRomPath(anchors));
+
+        // Clip path: full area minus image panels (hides line/circle behind photos)
+        const clipEl    = document.getElementById('path-clip');
+        const clipGroup = document.getElementById('story-clip-group');
+        let clipD = `M0,0 H${W} V${H} H0 Z`;
+        wrapper.querySelectorAll('.story-image-panel').forEach(panel => {
+            let el = panel, ox = 0, oy = 0;
+            while (el && el !== wrapper) { ox += el.offsetLeft; oy += el.offsetTop; el = el.offsetParent; }
+            clipD += ` M${ox},${oy} H${ox + panel.offsetWidth} V${oy + panel.offsetHeight} H${ox} Z`;
+        });
+        clipEl.innerHTML = '';
+        const cp = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        cp.setAttribute('d', clipD);
+        cp.setAttribute('fill-rule', 'evenodd');
+        cp.setAttribute('clip-rule', 'evenodd');
+        clipEl.appendChild(cp);
+        clipGroup.setAttribute('clip-path', 'url(#path-clip)');
+
+        // Scroll-driven circle
+        const totalLength = pathEl.getTotalLength();
+        pathEl.style.strokeDasharray  = '';
+        pathEl.style.strokeDashoffset = '';
+
+        function update() {
+            const wrapperOffsetTop = wrapper.getBoundingClientRect().top + window.scrollY;
+            const viewportCentre   = window.scrollY + window.innerHeight * 0.5;
+            const progress = Math.max(0, Math.min(1, (viewportCentre - wrapperOffsetTop) / H));
+            const pt = pathEl.getPointAtLength(progress * totalLength);
+            circleEl.setAttribute('cx', pt.x.toFixed(1));
+            circleEl.setAttribute('cy', pt.y.toFixed(1));
+        }
+
+        window.addEventListener('scroll', update, { passive: true });
+        update();
+    }
+
+    if (document.readyState === 'complete') {
+        buildStoryPath();
+    } else {
+        window.addEventListener('load', buildStoryPath);
+    }
+
+    // Scroll parallax on story image panels via object-position shift
+    function updateImageParallax() {
+        if (window.innerWidth <= 900) return;
+        document.querySelectorAll('.story-image-panel').forEach(panel => {
+            const rect = panel.getBoundingClientRect();
+            const centreOffset = (rect.top + rect.height / 2 - window.innerHeight / 2) / window.innerHeight;
+            const shift = Math.round(50 + centreOffset * 14);
+            const img = panel.querySelector('img');
+            if (img) img.style.objectPosition = `center ${shift}%`;
+        });
+    }
+    window.addEventListener('scroll', updateImageParallax, { passive: true });
+    updateImageParallax();
+
+    let legacyResizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(legacyResizeTimer);
+        legacyResizeTimer = setTimeout(buildStoryPath, 200);
+    });
 }

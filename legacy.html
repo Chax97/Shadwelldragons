@@ -9,673 +9,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        /* =============================================
-           LEGACY PAGE STYLES
-           ============================================= */
-
-        body.legacy-page {
-            background: #ffffff;
-            color: var(--text-dark);
-            overflow-x: hidden;
-        }
-
-        /* =============================================
-           HERO
-           ============================================= */
-
-        .legacy-hero {
-            position: relative;
-            height: 88vh;
-            min-height: 560px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .legacy-hero-bg {
-            position: absolute;
-            inset: 0;
-            background-image: url('images/legacy_fullteam.jpg');
-            background-size: cover;
-            background-position: center 30%;
-            transform: scale(1.05);
-            transition: transform 8s ease;
-        }
-
-        .legacy-hero-bg.loaded {
-            transform: scale(1);
-        }
-
-        .legacy-hero-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(
-                180deg,
-                rgba(10,10,10,0.3) 0%,
-                rgba(10,10,10,0.15) 40%,
-                rgba(10,10,10,0.6) 80%,
-                rgba(10,10,10,0.85) 100%
-            );
-        }
-
-        .legacy-hero-content {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            padding: 0 2rem;
-            max-width: 800px;
-        }
-
-        .hero-eyebrow {
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 500;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: #EF4444;
-            margin-bottom: 1rem;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease 0.3s forwards;
-        }
-
-        .legacy-hero-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: clamp(3.5rem, 8vw, 7rem);
-            font-weight: 800;
-            line-height: 1;
-            color: #ffffff;
-            letter-spacing: -0.02em;
-            margin-bottom: 0.5rem;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease 0.5s forwards;
-        }
-
-        .legacy-hero-subtitle {
-            font-family: 'Poppins', sans-serif;
-            font-size: clamp(1rem, 2.5vw, 1.4rem);
-            font-weight: 600;
-            color: rgba(255,255,255,0.65);
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            margin-bottom: 1.5rem;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease 0.7s forwards;
-        }
-
-        .legacy-hero-intro {
-            font-family: 'Outfit', sans-serif;
-            font-size: clamp(0.9rem, 1.5vw, 1.05rem);
-            color: rgba(255,255,255,0.45);
-            opacity: 0;
-            animation: fadeInUp 0.8s ease 0.9s forwards;
-        }
-
-        .scroll-indicator {
-            position: absolute;
-            bottom: 2.5rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease 1.2s forwards;
-        }
-
-        .scroll-indicator span {
-            font-size: 0.65rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.35);
-            font-family: 'Outfit', sans-serif;
-        }
-
-        .scroll-arrow {
-            width: 22px;
-            height: 22px;
-            border-right: 2px solid rgba(255,255,255,0.3);
-            border-bottom: 2px solid rgba(255,255,255,0.3);
-            transform: rotate(45deg);
-            animation: bounceDown 2s ease infinite;
-        }
-
-        @keyframes bounceDown {
-            0%, 100% { transform: rotate(45deg) translateY(0); opacity: 0.3; }
-            50% { transform: rotate(45deg) translateY(6px); opacity: 0.8; }
-        }
-
-        /* =============================================
-           STORY WRAPPER — holds the SVG + sections
-           ============================================= */
-
-        .legacy-story {
-            position: relative;
-            background: #ffffff;
-        }
-
-        /* =============================================
-           DECORATIVE PATH SVG
-           The circle uses mix-blend-mode: multiply:
-           - On white/light backgrounds: red is fully visible
-           - On dark photos: red multiplied with dark ≈ near-black, hidden
-           ============================================= */
-
-        .story-path-svg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 10;
-            mix-blend-mode: multiply;
-            overflow: visible;
-        }
-
-        #story-line {
-            fill: none;
-            stroke: #DC2626;
-            stroke-width: 2.5;
-            stroke-linecap: round;
-            opacity: 0.35;
-        }
-
-        #story-circle {
-            fill: #DC2626;
-            /* stroke from white makes it pop on light areas; multiply hides it on photos */
-        }
-
-        /* =============================================
-           STORY SECTIONS
-           ============================================= */
-
-        .story-section {
-            position: relative;
-            min-height: 85vh;
-            display: flex;
-            align-items: stretch;
-            overflow: hidden;
-        }
-
-        .story-section:nth-child(even) {
-            background: #F8FAFC;
-        }
-
-        .story-section:nth-child(odd) {
-            background: #ffffff;
-        }
-
-        .story-inner {
-            display: flex;
-            width: 100%;
-            align-items: stretch;
-        }
-
-        .story-section.img-left .story-inner {
-            flex-direction: row;
-        }
-
-        .story-section.img-right .story-inner {
-            flex-direction: row-reverse;
-        }
-
-        /* Image panel — images are opaque, so they naturally cover the SVG behind */
-        .story-image-panel {
-            flex: 0 0 55%;
-            position: relative;
-            overflow: hidden;
-            min-height: 560px;
-        }
-
-        .story-image-panel img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            display: block;
-            transform: scale(1.06);
-            transition: transform 1.4s ease;
-        }
-
-        .story-section.in-view .story-image-panel img {
-            transform: scale(1);
-        }
-
-        /* Secondary floating image */
-        .story-image-secondary {
-            position: absolute;
-            bottom: 2rem;
-            right: -1rem;
-            width: 200px;
-            aspect-ratio: 4/3;
-            overflow: hidden;
-            border: 4px solid #ffffff;
-            box-shadow: 0 16px 48px rgba(0,0,0,0.18);
-            transform: translateX(20px);
-            opacity: 0;
-            transition: all 0.8s ease 0.4s;
-        }
-
-        .story-section.img-right .story-image-secondary {
-            right: auto;
-            left: -1rem;
-            transform: translateX(-20px);
-        }
-
-        .story-section.in-view .story-image-secondary {
-            transform: translateX(0);
-            opacity: 1;
-        }
-
-        .story-image-secondary img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transform: none !important;
-        }
-
-        /* Text panel */
-        .story-text-panel {
-            flex: 0 0 45%;
-            display: flex;
-            align-items: center;
-            padding: 5rem 4.5rem 5rem 5rem;
-            position: relative;
-        }
-
-        .story-section.img-right .story-text-panel {
-            padding: 5rem 5rem 5rem 4.5rem;
-        }
-
-        .story-text-inner {
-            max-width: 420px;
-            position: relative;
-            z-index: 11; /* above SVG path (z-index:10) so text stays crisp */
-        }
-
-        .story-section-tag {
-            display: inline-block;
-            font-size: 0.68rem;
-            font-family: 'Outfit', sans-serif;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            opacity: 0;
-            transform: translateY(18px);
-            transition: all 0.6s ease 0.1s;
-        }
-
-        .story-section.in-view .story-section-tag {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .story-accent {
-            width: 36px;
-            height: 3px;
-            background: var(--primary-color);
-            margin-bottom: 1.25rem;
-            opacity: 0;
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: all 0.6s ease 0.15s;
-        }
-
-        .story-section.in-view .story-accent {
-            opacity: 1;
-            transform: scaleX(1);
-        }
-
-        .story-headline {
-            font-family: 'Poppins', sans-serif;
-            font-size: clamp(1.7rem, 2.8vw, 2.4rem);
-            font-weight: 700;
-            line-height: 1.12;
-            color: var(--text-dark);
-            margin-bottom: 1.25rem;
-            opacity: 0;
-            transform: translateY(22px);
-            transition: all 0.7s ease 0.2s;
-        }
-
-        .story-section.in-view .story-headline {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .story-body {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1rem;
-            line-height: 1.85;
-            color: var(--text-light);
-            opacity: 0;
-            transform: translateY(22px);
-            transition: all 0.7s ease 0.35s;
-        }
-
-        .story-section.in-view .story-body {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .story-body p {
-            margin-bottom: 0.9rem;
-        }
-
-        .story-body p:last-child {
-            margin-bottom: 0;
-        }
-
-        .story-body em {
-            color: var(--text-muted);
-            font-style: italic;
-        }
-
-        /* Large dim number watermark */
-        .story-number {
-            position: absolute;
-            top: 2.5rem;
-            right: 2.5rem;
-            font-family: 'Poppins', sans-serif;
-            font-size: 6rem;
-            font-weight: 800;
-            color: rgba(220,38,38,0.05);
-            line-height: 1;
-            user-select: none;
-            pointer-events: none;
-        }
-
-        .story-section.img-right .story-number {
-            right: auto;
-            left: 2.5rem;
-        }
-
-        /* =============================================
-           LEADERSHIP SECTION
-           ============================================= */
-
-        .leadership-section {
-            background: var(--gray-50);
-            padding: 7rem 2rem;
-            text-align: center;
-            border-top: 1px solid var(--gray-200);
-            border-bottom: 1px solid var(--gray-200);
-        }
-
-        .leadership-eyebrow {
-            font-size: 0.68rem;
-            font-family: 'Outfit', sans-serif;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: var(--primary-color);
-            margin-bottom: 0.75rem;
-        }
-
-        .leadership-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 0.75rem;
-        }
-
-        .leadership-subtitle {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1rem;
-            color: var(--text-light);
-            max-width: 480px;
-            margin: 0 auto 4rem;
-        }
-
-        .leadership-cards {
-            display: flex;
-            gap: 2.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            max-width: 920px;
-            margin: 0 auto;
-        }
-
-        .leader-card {
-            flex: 1;
-            min-width: 280px;
-            max-width: 400px;
-            background: #ffffff;
-            border: 1px solid var(--gray-200);
-            padding: 2.5rem;
-            text-align: left;
-            box-shadow: var(--shadow-md);
-            opacity: 0;
-            transform: translateY(28px);
-            transition: all 0.7s ease;
-        }
-
-        .leader-card.in-view {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .leader-card:last-child {
-            transition-delay: 0.18s;
-        }
-
-        .leader-portrait {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            background: var(--gradient-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 1.25rem;
-        }
-
-        .leader-name {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 0.2rem;
-        }
-
-        .leader-role {
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.72rem;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--primary-color);
-            margin-bottom: 1.25rem;
-        }
-
-        .leader-quote {
-            border-left: 3px solid var(--primary-color);
-            padding-left: 1.1rem;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.95rem;
-            line-height: 1.75;
-            color: var(--text-light);
-            font-style: italic;
-            margin: 0;
-        }
-
-        /* =============================================
-           FINAL SECTION
-           ============================================= */
-
-        .legacy-final {
-            position: relative;
-            min-height: 80vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .legacy-final-bg {
-            position: absolute;
-            inset: 0;
-            background-image: url('images/team_boat.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
-
-        .legacy-final-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(
-                180deg,
-                rgba(10,10,10,0.75) 0%,
-                rgba(10,10,10,0.55) 50%,
-                rgba(10,10,10,0.82) 100%
-            );
-        }
-
-        .legacy-final-content {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            padding: 4rem 2rem;
-            max-width: 640px;
-        }
-
-        .final-eyebrow {
-            font-size: 0.68rem;
-            font-family: 'Outfit', sans-serif;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: #EF4444;
-            margin-bottom: 1rem;
-            opacity: 0;
-            transform: translateY(18px);
-            transition: all 0.7s ease;
-        }
-
-        .final-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: clamp(2.2rem, 5vw, 3.6rem);
-            font-weight: 800;
-            line-height: 1.05;
-            color: #ffffff;
-            margin-bottom: 1.25rem;
-            opacity: 0;
-            transform: translateY(22px);
-            transition: all 0.7s ease 0.12s;
-        }
-
-        .final-body {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.05rem;
-            line-height: 1.8;
-            color: rgba(255,255,255,0.55);
-            margin-bottom: 2.25rem;
-            opacity: 0;
-            transform: translateY(22px);
-            transition: all 0.7s ease 0.24s;
-        }
-
-        .legacy-final.in-view .final-eyebrow,
-        .legacy-final.in-view .final-title,
-        .legacy-final.in-view .final-body {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .btn-legacy {
-            display: inline-block;
-            background: var(--primary-color);
-            color: #ffffff;
-            font-family: 'Outfit', sans-serif;
-            font-weight: 600;
-            font-size: 0.88rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            padding: 0.9rem 2.25rem;
-            text-decoration: none;
-            border: 2px solid transparent;
-            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease,
-                        opacity 0.7s ease 0.36s, transform 0.7s ease 0.36s;
-            opacity: 0;
-            transform: translateY(16px);
-        }
-
-        .btn-legacy:hover {
-            background: transparent;
-            border-color: #EF4444;
-            color: #EF4444;
-        }
-
-        .legacy-final.in-view .btn-legacy {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* =============================================
-           ANIMATIONS
-           ============================================= */
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(28px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        /* =============================================
-           RESPONSIVE
-           ============================================= */
-
-        @media (max-width: 900px) {
-            .story-section {
-                min-height: auto;
-            }
-
-            .story-inner {
-                flex-direction: column !important;
-            }
-
-            .story-image-panel {
-                flex: none;
-                height: 60vw;
-                min-height: 240px;
-                width: 100%;
-            }
-
-            .story-text-panel {
-                flex: none;
-                width: 100%;
-                padding: 3rem 1.75rem;
-            }
-
-            .story-section.img-right .story-text-panel {
-                padding: 3rem 1.75rem;
-            }
-
-            .story-text-inner {
-                max-width: 100%;
-            }
-
-            .story-number {
-                display: none;
-            }
-
-            .story-image-secondary {
-                display: none;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .legacy-final-bg {
-                background-attachment: scroll;
-            }
-        }
-    </style>
 </head>
 <body class="legacy-page">
 
@@ -713,7 +46,6 @@
         <div class="legacy-hero-content">
             <p class="hero-eyebrow">Our Legacy</p>
             <h1 class="legacy-hero-title">The Dragon Awakes</h1>
-            <p class="legacy-hero-subtitle">Shadwell Dragons</p>
             <p class="legacy-hero-intro">From Shadwell Solander to Shadwell Dragons</p>
         </div>
         <div class="scroll-indicator">
@@ -729,8 +61,15 @@
 
         <!-- Decorative flowing path — generated by JS below -->
         <svg class="story-path-svg" id="story-svg" aria-hidden="true">
-            <path id="story-line" />
-            <circle id="story-circle" r="13" />
+            <defs>
+                <clipPath id="path-clip" clipPathUnits="userSpaceOnUse">
+                    <!-- populated by JS: full area minus image panels -->
+                </clipPath>
+            </defs>
+            <g id="story-clip-group">
+                <path id="story-line" />
+                <circle id="story-circle" r="7" />
+            </g>
         </svg>
 
         <!-- SECTION 1: Image Left / Text Right -->
@@ -738,20 +77,17 @@
             <div class="story-inner">
                 <div class="story-image-panel">
                     <img src="images/legacy_90s.jpeg" alt="Shadwell Solander crew in the 1990s" loading="lazy">
-                    <div class="story-image-secondary">
-                        <img src="images/legacy_96results.PNG" alt="1996 race results" loading="lazy">
-                    </div>
                 </div>
                 <div class="story-text-panel">
                     <div class="story-number">01</div>
                     <div class="story-text-inner">
-                        <span class="story-section-tag">1990s</span>
+                        <span class="story-section-tag">1990's</span>
                         <div class="story-accent"></div>
                         <h2 class="story-headline">The Solander Era</h2>
                         <div class="story-body">
-                            <p>It started at Shadwell Basin with a group of friends and a shared heritage. We were Shadwell Solander, the first all-Bangladeshi crew to ever enter the British Dragon Boat Association competition.</p>
-                            <p>Under Captain Vas Hirani and Coach Mike Thomas we transformed from local underdogs into a tactical powerhouse, climbing every division until we reached the Premier Division.</p>
-                            <p><em>We weren't just paddling for trophies.<br>We were paddling for our identity.</em></p>
+                            <p>It started at Shadwell Basin with a group of friends and a shared heritage. We were Shadwell Solander, the first all-Bangladeshi crew to ever enter the British Dragon Boat Association (BDA) circuit.</p>
+                            <p>Under the expert guidance of Coach Vas Hirani and Team Manager Mike Thomas, we were transformed from local underdogs into a tactical powerhouse. We didn't just compete; we climbed every division, eventually breaking into the Premier Division.</p>
+                            <p><em>We weren't just paddling for trophies; we were paddling for our identity.</em></p>
                         </div>
                     </div>
                 </div>
@@ -767,13 +103,13 @@
                 <div class="story-text-panel">
                     <div class="story-number">02</div>
                     <div class="story-text-inner">
-                        <span class="story-section-tag">1990s — 2022</span>
+                        <span class="story-section-tag">1990's — 2022</span>
                         <div class="story-accent"></div>
                         <h2 class="story-headline">The 25-Year Hibernation</h2>
                         <div class="story-body">
-                            <p>The Shadwell Solander boys became men. Careers, families and responsibilities took over.</p>
-                            <p>For nearly 25 years the paddles were stored away and the dragon lay dormant.</p>
-                            <p><em>Our victories became stories told at weddings and family dinners — legends of our youth.</em></p>
+                            <p>Then, life happened. The "Shadwell Solander Boys" became men with careers, families and decades of responsibilities took over.</p>
+                            <p>For nearly 25 years, the paddles were stored away and the dragon lay dormant.</p>
+                            <p><em>Our glory days became stories told at weddings and family dinners, a legend of our youth.</em></p>
                         </div>
                     </div>
                 </div>
@@ -784,7 +120,7 @@
         <section class="story-section img-left" id="section-3">
             <div class="story-inner">
                 <div class="story-image-panel">
-                    <img src="images/index_action.JPG" alt="Dragon boat racing action" loading="lazy">
+                    <img src="images/legacy_womens.jpg" alt="Dragon boat racing action" loading="lazy">
                 </div>
                 <div class="story-text-panel">
                     <div class="story-number">03</div>
@@ -794,7 +130,7 @@
                         <h2 class="story-headline">The Birmingham Spark</h2>
                         <div class="story-body">
                             <p>Fate intervened at a festival in Birmingham.</p>
-                            <p>A few original members stepped into a boat to help a local team — and suddenly the fire was back.</p>
+                            <p>A few original members stepped into a boat to help a local team and suddenly the fire was back.</p>
                             <p><em>The muscle memory returned.<br>The rhythm of the drum took hold.<br>The hunger was reignited.</em></p>
                         </div>
                     </div>
@@ -815,11 +151,9 @@
                         <div class="story-accent"></div>
                         <h2 class="story-headline">Shadwell Dragons</h2>
                         <div class="story-body">
-                            <p>One afternoon in Birmingham sparked a movement.</p>
-                            <p>Phone calls were made. Old teammates were tracked down.</p>
-                            <p>The original crew assembled again — older, wiser and ready to rise.</p>
-                            <p>We returned under a new name: Shadwell Dragons.</p>
-                            <p><em>Not just to participate, but to pass our history to the next generation.</em></p>
+                            <p>One afternoon in Birmingham sparked a movement. Phone calls were made, old teammates were tracked down and the original crew assembled from retirement, older, wiser and ready to dominate.</p>
+                            <p>We rebranded as the Shadwell Dragons, merging our Shadwell Solander roots with a new mission.</p>
+                            <p><em>We didn't just come back to participate. We came back to pass on our history to our younger generation.</em></p>
                         </div>
                     </div>
                 </div>
@@ -832,23 +166,24 @@
          LEADERSHIP SECTION
          ============================================= -->
     <section class="leadership-section">
-        <p class="leadership-eyebrow">The Founders</p>
-        <h2 class="leadership-title">The Men Who Started It All</h2>
+        <h2 class="leadership-title">The Founders</h2>
         <p class="leadership-subtitle">Honorary founders who built the legacy from the ground up.</p>
 
         <div class="leadership-cards">
             <div class="leader-card" id="leader-1">
-                <div class="leader-portrait">VH</div>
+                <img src="images/legacy_vas.png" alt="Vas Hirani" class="leader-portrait-img" style="object-position: center 50%;">
                 <p class="leader-name">Vas Hirani</p>
-                <p class="leader-role">Honorary Founder &amp; Crew Captain</p>
+                <p class="leader-role">Honorary Founder</p>
+                <p class="leader-bio">The coach who gave us the technical edge to out-paddle the professionals.</p>
                 <blockquote class="leader-quote">
-                    "From paddle clashes to unity and friendship, through honour and strength — from boys to men we stay as one."
+                    "From paddle clashes to unity and friendship, through honour and strength, from boys to men we stay as one."
                 </blockquote>
             </div>
             <div class="leader-card" id="leader-2">
-                <div class="leader-portrait">MT</div>
+                <img src="images/legacy_mike.png" alt="Mike Thomas" class="leader-portrait-img">
                 <p class="leader-name">Mike Thomas</p>
-                <p class="leader-role">Honorary Founder &amp; Head Coach</p>
+                <p class="leader-role">Honorary Founder</p>
+                <p class="leader-bio">Our former manager whose vision took us to the top, now serving as the President of the BDA.</p>
                 <blockquote class="leader-quote">
                     "Their journey from the Basin to racing against the best teams in British dragon boating set the standard. To see them return almost 25 years later fills me with honour."
                 </blockquote>
@@ -912,138 +247,5 @@
     </footer>
 
     <script src="script.js"></script>
-    <script>
-        // =============================================
-        // HERO BG ZOOM
-        // =============================================
-        document.getElementById('hero-bg').classList.add('loaded');
-
-        // =============================================
-        // SECTION FADE-IN (IntersectionObserver)
-        // =============================================
-        const storySections = document.querySelectorAll('.story-section');
-        const leaderCards   = document.querySelectorAll('.leader-card');
-        const finalSection  = document.querySelector('.legacy-final');
-
-        const sectionObserver = new IntersectionObserver(entries => {
-            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
-        }, { threshold: 0.18 });
-
-        storySections.forEach(s => sectionObserver.observe(s));
-
-        const cardObserver = new IntersectionObserver(entries => {
-            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
-        }, { threshold: 0.2 });
-
-        leaderCards.forEach(c => cardObserver.observe(c));
-
-        const finalObserver = new IntersectionObserver(entries => {
-            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
-        }, { threshold: 0.15 });
-
-        if (finalSection) finalObserver.observe(finalSection);
-
-        // =============================================
-        // DECORATIVE SVG PATH — CURVY FLOWING LINE
-        // =============================================
-
-        // Convert array of [x,y] points to a smooth SVG cubic-bezier path
-        // using Catmull-Rom → bezier conversion
-        function catmullRomPath(pts) {
-            if (pts.length < 2) return '';
-            let d = `M ${pts[0][0]},${pts[0][1]}`;
-            for (let i = 0; i < pts.length - 1; i++) {
-                const p0 = pts[Math.max(0, i - 1)];
-                const p1 = pts[i];
-                const p2 = pts[i + 1];
-                const p3 = pts[Math.min(pts.length - 1, i + 2)];
-                const tension = 0.4;
-                const cp1x = p1[0] + (p2[0] - p0[0]) * tension;
-                const cp1y = p1[1] + (p2[1] - p0[1]) * tension;
-                const cp2x = p2[0] - (p3[0] - p1[0]) * tension;
-                const cp2y = p2[1] - (p3[1] - p1[1]) * tension;
-                d += ` C ${cp1x.toFixed(1)},${cp1y.toFixed(1)} ${cp2x.toFixed(1)},${cp2y.toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
-            }
-            return d;
-        }
-
-        function buildStoryPath() {
-            const wrapper   = document.getElementById('legacy-story');
-            const svgEl     = document.getElementById('story-svg');
-            const pathEl    = document.getElementById('story-line');
-            const circleEl  = document.getElementById('story-circle');
-            if (!wrapper || !svgEl || !pathEl || !circleEl) return;
-
-            const W = wrapper.offsetWidth;
-            const H = wrapper.offsetHeight;
-
-            svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
-            svgEl.setAttribute('width',  W);
-            svgEl.setAttribute('height', H);
-
-            // Build anchor points: center of each text panel within the wrapper
-            const anchors = [];
-            anchors.push([W * 0.5, 0]); // enter from top-center
-
-            document.querySelectorAll('.story-section').forEach(section => {
-                const textPanel = section.querySelector('.story-text-panel');
-                if (!textPanel) return;
-                // offsetLeft/offsetTop are relative to offsetParent — walk up to wrapper
-                let el = textPanel;
-                let ox = 0, oy = 0;
-                while (el && el !== wrapper) {
-                    ox += el.offsetLeft;
-                    oy += el.offsetTop;
-                    el = el.offsetParent;
-                }
-                const cx = ox + textPanel.offsetWidth  * 0.5;
-                const cy = oy + textPanel.offsetHeight * 0.5;
-                anchors.push([cx, cy]);
-            });
-
-            anchors.push([W * 0.5, H]); // exit at bottom-center
-
-            pathEl.setAttribute('d', catmullRomPath(anchors));
-
-            // ---- Scroll-driven circle ----
-            const totalLength = pathEl.getTotalLength();
-
-            // Stamp a dashed reveal so the line draws in as you scroll (optional elegance)
-            pathEl.style.strokeDasharray  = totalLength;
-            pathEl.style.strokeDashoffset = totalLength;
-
-            function update() {
-                const wrapTop = wrapper.getBoundingClientRect().top;
-                // progress: 0 when wrapper top at viewport bottom, 1 when wrapper bottom at viewport top
-                const raw = (-wrapTop) / (H - window.innerHeight);
-                const progress = Math.max(0, Math.min(1, raw));
-
-                // Reveal the line up to the circle position
-                pathEl.style.strokeDashoffset = totalLength * (1 - progress);
-
-                // Move the circle
-                const pt = pathEl.getPointAtLength(progress * totalLength);
-                circleEl.setAttribute('cx', pt.x.toFixed(1));
-                circleEl.setAttribute('cy', pt.y.toFixed(1));
-            }
-
-            window.addEventListener('scroll', update, { passive: true });
-            update();
-        }
-
-        // Build after layout settles
-        if (document.readyState === 'complete') {
-            buildStoryPath();
-        } else {
-            window.addEventListener('load', buildStoryPath);
-        }
-
-        // Rebuild on resize (debounced)
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(buildStoryPath, 200);
-        });
-    </script>
 </body>
 </html>
