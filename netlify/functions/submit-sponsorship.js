@@ -8,8 +8,8 @@ async function sendEmail(subject, html) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: 'onboarding@resend.dev',
-      to: 'info@shadwelldragons.co.uk',
+      from: 'noreply@shadwelldragons.com',
+      to: 'faisal.chaklader97@gmail.com',
       subject,
       html,
     }),
