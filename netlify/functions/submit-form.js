@@ -1,19 +1,23 @@
 const { google } = require('googleapis');
 
 async function sendEmail(subject, html) {
-  await fetch('https://api.resend.com/emails', {
+  const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: 'Shadwell Dragons <noreply@shadwelldragons.co.uk>',
+      from: 'onboarding@resend.dev',
       to: 'info@shadwelldragons.co.uk',
       subject,
       html,
     }),
   });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Resend error ${res.status}: ${err}`);
+  }
 }
 
 exports.handler = async (event) => {
