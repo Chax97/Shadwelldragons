@@ -911,6 +911,73 @@ body.index-page .getting-there {
 
 /* Footer - Modern Multi-Column */
 /* ==========================================
+   INDEX CONTACT SECTION
+   ========================================== */
+.index-contact-section {
+    padding: 6rem 0 5rem;
+    background: var(--white);
+    text-align: center;
+}
+
+.index-contact-cta h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+}
+
+.index-contact-section .form-row {
+    grid-template-columns: 1fr;
+}
+
+.index-contact-section .book-form input,
+.index-contact-section .book-form textarea {
+    background: #fff;
+    color: #1a1a1a;
+    border: 2px solid #e53e3e;
+}
+
+.index-contact-section .book-form input::placeholder,
+.index-contact-section .book-form textarea::placeholder {
+    color: #888;
+}
+
+.index-contact-section .book-form input:focus,
+.index-contact-section .book-form textarea:focus {
+    background: #fff;
+    border-color: #c53030;
+}
+
+.index-contact-cta p {
+    font-size: 1.1rem;
+    color: var(--gray-600);
+    margin-bottom: 2rem;
+}
+
+.index-contact-form-wrap {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, opacity 0.4s ease, margin-top 0.5s ease;
+    opacity: 0;
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+.index-contact-form-wrap.open {
+    max-height: 600px;
+    opacity: 1;
+    margin-top: 2rem;
+}
+
+.index-contact-section .book-form button[type="submit"] {
+    box-shadow: none;
+    border: 1.5px solid #111;
+}
+
+/* ==========================================
    SPONSOR LOGOS MARQUEE SECTION
    ========================================== */
 .sponsors-section {

@@ -1,7 +1,22 @@
 const { google } = require('googleapis');
 
+async function sendEmail(subject, html) {
+  await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: 'Shadwell Dragons <noreply@shadwelldragons.co.uk>',
+      to: 'info@shadwelldragons.co.uk',
+      subject,
+      html,
+    }),
+  });
+}
+
 exports.handler = async (event) => {
-  // Only allow POST requests
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
@@ -10,14 +25,11 @@ exports.handler = async (event) => {
   }
 
   try {
-    // Parse form data
     const data = JSON.parse(event.body || '{}');
-    
-    // Get credentials from environment variables
+
     const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY || '{}');
     const spreadsheetId = process.env.GOOGLE_SHEET_ID;
 
-    // Authenticate with Google Sheets
     const auth = new google.auth.GoogleAuth({
       credentials,
       scopes: ['https://www.googleapis.com/auth/spreadsheets'],
@@ -25,7 +37,6 @@ exports.handler = async (event) => {
 
     const sheets = google.sheets({ version: 'v4', auth });
 
-    // Append data to sheet
     await sheets.spreadsheets.values.append({
       spreadsheetId,
       range: 'Sheet1!A:G',
@@ -42,6 +53,21 @@ exports.handler = async (event) => {
         ]]
       }
     });
+
+    const isContact = data.source === 'website-contact';
+    const subject = isContact ? 'New Contact Enquiry' : 'New Booking Enquiry';
+    const html = `
+      <h2>${subject}</h2>
+      <p><strong>Name:</strong> ${data.name || 'N/A'}</p>
+      <p><strong>Email:</strong> ${data.email || 'N/A'}</p>
+      ${data.phone ? `<p><strong>Phone:</strong> ${data.phone}</p>` : ''}
+      ${data.session ? `<p><strong>Session:</strong> ${data.session}</p>` : ''}
+      ${data.message ? `<p><strong>Message:</strong> ${data.message}</p>` : ''}
+      <p><strong>Source:</strong> ${data.source || 'website'}</p>
+      <p><strong>Submitted:</strong> ${new Date().toLocaleString('en-GB')}</p>
+    `;
+
+    await sendEmail(subject, html);
 
     return {
       statusCode: 200,

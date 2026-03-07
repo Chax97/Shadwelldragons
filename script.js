@@ -55,6 +55,7 @@ document.querySelectorAll('.book-form').forEach(form => {
         // Determine form type
         const isSponsorship = form.id === 'sponsorshipForm';
         const isCorporate = form.id === 'corporateForm';
+        const isContact = form.id === 'contactForm';
 
         // Disable button and show loading state
         submitBtn.disabled = true;
@@ -85,6 +86,14 @@ document.querySelectorAll('.book-form').forEach(form => {
                 source: 'website-corporate'
             };
             endpoint = '/.netlify/functions/submit-corporate';
+        } else if (isContact) {
+            formData = {
+                name: form.querySelector('[name="name"]').value,
+                email: form.querySelector('[name="email"]').value,
+                message: form.querySelector('[name="message"]')?.value || '',
+                source: 'website-contact'
+            };
+            endpoint = '/.netlify/functions/submit-form';
         } else {
             formData = {
                 name: form.querySelector('[name="name"]').value,
@@ -116,6 +125,8 @@ document.querySelectorAll('.book-form').forEach(form => {
                     ? 'Thank you for your interest! We will contact you shortly to discuss sponsorship opportunities.'
                     : isCorporate
                     ? 'Thank you! We will be in touch shortly to discuss your corporate event.'
+                    : isContact
+                    ? 'Thank you for your message! We will get back to you shortly.'
                     : 'Thank you! We will contact you shortly to confirm your taster session.';
                 form.reset();
             } else {
@@ -657,6 +668,21 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initFloatingCTA);
 } else {
     initFloatingCTA();
+}
+
+// =============================================
+// INDEX CONTACT TOGGLE
+// =============================================
+const contactToggleBtn = document.getElementById('contactToggleBtn');
+const indexContactFormWrap = document.getElementById('indexContactFormWrap');
+if (contactToggleBtn && indexContactFormWrap) {
+    contactToggleBtn.addEventListener('click', () => {
+        const isOpen = indexContactFormWrap.classList.toggle('open');
+        contactToggleBtn.textContent = isOpen ? 'Close' : 'Contact Us';
+        if (isOpen) {
+            indexContactFormWrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    });
 }
 
 // =============================================
