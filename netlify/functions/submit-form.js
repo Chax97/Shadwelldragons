@@ -86,7 +86,11 @@ exports.handler = async (event) => {
         <br>
         <p>Best wishes,<br>Shadwell Dragons</p>
       `;
-      await sendEmail(data.email, 'Thanks for contacting Shadwell Dragons', confirmHtml);
+      try {
+        await sendEmail(data.email, 'Thanks for contacting Shadwell Dragons', confirmHtml);
+      } catch (confirmErr) {
+        console.error('Confirmation email failed:', confirmErr);
+      }
     }
 
     return {
