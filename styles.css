@@ -5490,7 +5490,7 @@ body.legacy-page {
 .legacy-hero-bg {
     position: absolute;
     inset: 0;
-    background-image: url('images/legacy_fullteam.jpg');
+    background-image: url('images/legacy_team.png');
     background-size: cover;
     background-position: center 30%;
     transform: scale(1.05);
