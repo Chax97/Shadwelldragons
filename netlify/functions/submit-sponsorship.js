@@ -1,18 +1,21 @@
 const { google } = require('googleapis');
 
-async function sendEmail(subject, html) {
+async function sendEmail(to, subject, html, replyTo) {
+  const body = {
+    from: 'info@shadwelldragons.co.uk',
+    to,
+    subject,
+    html,
+  };
+  if (replyTo) body.reply_to = replyTo;
+
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      from: 'noreply@shadwelldragons.com',
-      to: 'faisal.chaklader97@gmail.com',
-      subject,
-      html,
-    }),
+    body: JSON.stringify(body),
   });
   if (!res.ok) {
     const err = await res.text();
@@ -68,7 +71,18 @@ exports.handler = async (event) => {
       <p><strong>Submitted:</strong> ${new Date().toLocaleString('en-GB')}</p>
     `;
 
-    await sendEmail('New Sponsorship Enquiry', html);
+    await sendEmail('faisal.chaklader97@gmail.com', 'New Sponsorship Enquiry', html, data.email);
+
+    if (data.email) {
+      const confirmHtml = `
+        <p>Hi ${data.name || 'there'},</p>
+        <p>Thank you for your sponsorship enquiry with Shadwell Dragons. We've received your message and will be in touch shortly.</p>
+        <p>If you have any further questions in the meantime, feel free to reply to this email.</p>
+        <br>
+        <p>Best wishes,<br>Shadwell Dragons</p>
+      `;
+      await sendEmail(data.email, 'Thank you for your sponsorship enquiry – Shadwell Dragons', confirmHtml);
+    }
 
     return {
       statusCode: 200,

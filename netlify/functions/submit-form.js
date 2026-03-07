@@ -1,18 +1,21 @@
 const { google } = require('googleapis');
 
-async function sendEmail(subject, html) {
+async function sendEmail(to, subject, html, replyTo) {
+  const body = {
+    from: 'info@shadwelldragons.co.uk',
+    to,
+    subject,
+    html,
+  };
+  if (replyTo) body.reply_to = replyTo;
+
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      from: 'noreply@shadwelldragons.com',
-      to: 'faisal.chaklader97@gmail.com',
-      subject,
-      html,
-    }),
+    body: JSON.stringify(body),
   });
   if (!res.ok) {
     const err = await res.text();
@@ -71,7 +74,20 @@ exports.handler = async (event) => {
       <p><strong>Submitted:</strong> ${new Date().toLocaleString('en-GB')}</p>
     `;
 
-    await sendEmail(subject, html);
+    // Notify the team, with reply-to set to the submitter
+    await sendEmail('faisal.chaklader97@gmail.com', subject, html, data.email);
+
+    // Send confirmation to the submitter
+    if (isContact && data.email) {
+      const confirmHtml = `
+        <p>Hi ${data.name || 'there'},</p>
+        <p>Thanks for getting in touch! We've received your message and will get back to you shortly.</p>
+        <p>If you have any further questions in the meantime, feel free to reply to this email.</p>
+        <br>
+        <p>Best wishes,<br>Shadwell Dragons</p>
+      `;
+      await sendEmail(data.email, 'Thanks for contacting Shadwell Dragons', confirmHtml);
+    }
 
     return {
       statusCode: 200,
