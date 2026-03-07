@@ -2,7 +2,7 @@ const { google } = require('googleapis');
 
 async function sendEmail(to, subject, html, replyTo) {
   const body = {
-    from: 'info@shadwelldragons.co.uk',
+    from: 'info@shadwelldragons.com',
     to,
     subject,
     html,
