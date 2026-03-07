@@ -158,7 +158,7 @@ document.querySelectorAll('.book-form').forEach(form => {
                     `Message: ${formData.message || 'N/A'}`
                 );
             }
-            const mailtoLink = `mailto:hello@shadwelldragons.com?subject=${subject}&body=${body}`;
+            const mailtoLink = `mailto:info@shadwelldragons.co.uk?subject=${subject}&body=${body}`;
 
             formStatus.style.display = 'block';
             formStatus.className = 'form-status error';
