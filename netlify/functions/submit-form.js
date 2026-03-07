@@ -75,7 +75,7 @@ exports.handler = async (event) => {
     `;
 
     // Notify the team, with reply-to set to the submitter
-    await sendEmail('faisal.chaklader97@gmail.com', subject, html, data.email);
+    await sendEmail('fiasal56@hotmail.com', subject, html, data.email);
 
     // Send confirmation to the submitter
     if (isContact && data.email) {
