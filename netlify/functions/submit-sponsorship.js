@@ -73,6 +73,7 @@ exports.handler = async (event) => {
 
     await sendEmail('faisal.chaklader97@gmail.com', 'New Sponsorship Enquiry', html, data.email);
 
+    console.log('Confirmation email target:', data.email);
     if (data.email) {
       const confirmHtml = `
         <p>Hi ${data.name || 'there'},</p>
