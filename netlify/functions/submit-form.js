@@ -2,7 +2,7 @@ const { google } = require('googleapis');
 
 async function sendEmail(to, subject, html, replyTo) {
   const body = {
-    from: 'info@shadwelldragons.com',
+    from: 'noreply@shadwelldragons.com',
     to,
     subject,
     html,
@@ -75,15 +75,16 @@ exports.handler = async (event) => {
     `;
 
     // Notify the team, with reply-to set to the submitter
-    await sendEmail('fiasal56@hotmail.com', subject, html, data.email);
+    await sendEmail('faisal.chaklader97@gmail.com', subject, html, data.email);
 
     // Send confirmation to the submitter
-    console.log('Confirmation email target:', data.email, 'source:', data.source);
-    if (data.email) {
+    console.log('Confirmation email target:', data.email, 'isContact:', isContact);
+    if (isContact && data.email) {
       const confirmHtml = `
         <p>Hi ${data.name || 'there'},</p>
         <p>Thanks for getting in touch! We've received your message and will get back to you shortly.</p>
-        <p>If you have any further questions in the meantime, feel free to reply to this email.</p>
+        <p>If you have any further questions in the meantime, please feel free to contact us info@shadwelldragons.co.uk.</p>
+        <p>Before your first session please fill out this form: https://forms.office.com/pages/responsepage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAAZ__qYaUhpUODVPWlJUN1NaSDFTSkNPSEU4UUlPUUk1MC4u&route=shorturl</p>
         <br>
         <p>Best wishes,<br>Shadwell Dragons</p>
       `;

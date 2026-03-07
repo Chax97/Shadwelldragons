@@ -126,9 +126,14 @@ document.querySelectorAll('.book-form').forEach(form => {
                     : isCorporate
                     ? 'Thank you! We will be in touch shortly to discuss your corporate event.'
                     : isContact
-                    ? 'Thank you for your message! We will get back to you shortly.'
+                    ? 'Thank you for your message! Redirecting you now...'
                     : 'Thank you! We will contact you shortly to confirm your taster session.';
                 form.reset();
+                if (isContact) {
+                    setTimeout(() => {
+                        window.location.href = 'https://docs.google.com/forms/d/e/1FAIpQLSfBv37reF8sEzPO0EmSwcKoYPWkYj5Z3TfXT6tW0bTVcEVzQw/viewform';
+                    }, 1500);
+                }
             } else {
                 throw new Error(result.error || 'Failed to submit form');
             }

@@ -2,7 +2,7 @@ const { google } = require('googleapis');
 
 async function sendEmail(to, subject, html, replyTo) {
   const body = {
-    from: 'info@shadwelldragons.com',
+    from: 'noreply@shadwelldragons.com',
     to,
     subject,
     html,
@@ -75,14 +75,14 @@ exports.handler = async (event) => {
       <p><strong>Submitted:</strong> ${new Date().toLocaleString('en-GB')}</p>
     `;
 
-    await sendEmail('faisal.chaklader97@gmail.com', 'New Corporate Enquiry', html, data.email);
+    await sendEmail('info@shadwelldragons.co.uk', 'New Corporate Enquiry', html, data.email);
 
     console.log('Confirmation email target:', data.email);
     if (data.email) {
       const confirmHtml = `
         <p>Hi ${data.name || 'there'},</p>
         <p>Thank you for your corporate enquiry with Shadwell Dragons. We've received your message and will be in touch shortly.</p>
-        <p>If you have any further questions in the meantime, feel free to reply to this email.</p>
+        <p>If you have any further questions in the meantime, please feel free to contact us info@shadwelldragons.co.uk.</p>
         <br>
         <p>Best wishes,<br>Shadwell Dragons</p>
       `;
