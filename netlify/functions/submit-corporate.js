@@ -85,6 +85,8 @@ exports.handler = async (event) => {
         <p>If you have any further questions in the meantime, please feel free to contact us info@shadwelldragons.co.uk.</p>
         <br>
         <p>Best wishes,<br>Shadwell Dragons</p>
+        <br>
+        <img src="https://www.shadwelldragons.co.uk/images/SD_Logo_Transparent.png" alt="Shadwell Dragons" width="120" style="display:block;">
       `;
       try {
         await sendEmail(data.email, 'Thank you for your corporate enquiry – Shadwell Dragons', confirmHtml);
