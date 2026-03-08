@@ -130,9 +130,11 @@ document.querySelectorAll('.book-form').forEach(form => {
                     : 'Thank you! We will contact you shortly to confirm your taster session.';
                 form.reset();
                 if (form.id === 'contactForm') {
+                    console.log('Redirecting...');
                     setTimeout(() => {
-                        window.location.href = 'https://docs.google.com/forms/d/e/1FAIpQLSfBv37reF8sEzPO0EmSwcKoYPWkYj5Z3TfXT6tW0bTVcEVzQw/viewform';
-                    }, 1500);
+                        console.log('Redirect firing now');
+                        window.location.assign('https://docs.google.com/forms/d/e/1FAIpQLSfBv37reF8sEzPO0EmSwcKoYPWkYj5Z3TfXT6tW0bTVcEVzQw/viewform');
+                    }, 2000);
                 }
             } else {
                 throw new Error(result.error || 'Failed to submit form');
