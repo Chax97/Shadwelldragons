@@ -125,11 +125,11 @@ document.querySelectorAll('.book-form').forEach(form => {
                     ? 'Thank you for your interest! We will contact you shortly to discuss sponsorship opportunities.'
                     : isCorporate
                     ? 'Thank you! We will be in touch shortly to discuss your corporate event.'
-                    : isContact
+                    : form.id === 'contactForm'
                     ? 'Thank you for your message! Please fill out the form in the next page before your taster session.'
                     : 'Thank you! We will contact you shortly to confirm your taster session.';
                 form.reset();
-                if (isContact) {
+                if (form.id === 'contactForm') {
                     setTimeout(() => {
                         window.location.href = 'https://docs.google.com/forms/d/e/1FAIpQLSfBv37reF8sEzPO0EmSwcKoYPWkYj5Z3TfXT6tW0bTVcEVzQw/viewform';
                     }, 1500);
