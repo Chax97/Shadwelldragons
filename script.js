@@ -126,7 +126,7 @@ document.querySelectorAll('.book-form').forEach(form => {
                     : isCorporate
                     ? 'Thank you! We will be in touch shortly to discuss your corporate event.'
                     : isContact
-                    ? 'Thank you for your message! Redirecting you now...'
+                    ? 'Thank you for your message! Please fill out the form in the next page before your taster session.'
                     : 'Thank you! We will contact you shortly to confirm your taster session.';
                 form.reset();
                 if (isContact) {
