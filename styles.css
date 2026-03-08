@@ -112,6 +112,15 @@ body.index-page .getting-there {
 
 .logo a {
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-logo {
+    height: 36px;
+    width: auto;
+    display: block;
 }
 
 .logo h1 {
