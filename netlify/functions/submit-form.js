@@ -78,8 +78,8 @@ exports.handler = async (event) => {
     await sendEmail('faisal.chaklader97@gmail.com', subject, html, data.email);
 
     // Send confirmation to the submitter
-    console.log('Confirmation email target:', data.email, 'isContact:', isContact);
-    if (isContact && data.email) {
+    console.log('Confirmation email target:', data.email);
+    if (data.email) {
       const confirmHtml = `
         <p>Hi ${data.name || 'there'},</p>
         <p>Thanks for getting in touch! We've received your message and will get back to you shortly.</p>
