@@ -129,7 +129,7 @@ document.querySelectorAll('.book-form').forEach(form => {
                     ? 'Thank you for your message! Please fill out the form in the next page before your taster session.'
                     : 'Thank you! We will contact you shortly to confirm your taster session.';
                 form.reset();
-                if (form.id === 'contactForm') {
+                if (form.id === 'contactForm' || form.id === 'booking-form') {
                     console.log('Redirecting...');
                     setTimeout(() => {
                         console.log('Redirect firing now');

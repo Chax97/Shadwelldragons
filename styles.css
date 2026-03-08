@@ -4967,7 +4967,7 @@ body.index-page .sponsors-section {
     }
 
     .alternating-image video.video-teamstart {
-        object-position: center bottom;
+        object-position: center 70%;
     }
 
     /* Alternating row padding - mobile */

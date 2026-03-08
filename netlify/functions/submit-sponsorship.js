@@ -82,7 +82,7 @@ exports.handler = async (event) => {
         <br>
         <p>Best wishes,<br>Shadwell Dragons</p>
         <br>
-        <img src="https://www.shadwelldragons.co.uk/images/SD_Logo_Transparent.png" alt="Shadwell Dragons" width="120" style="display:block;">
+        <img src="https://shadwelldragons.netlify.app/images/SD_Logo_Transparent.png" alt="Shadwell Dragons" width="120" style="display:block;">
       `;
       try {
         await sendEmail(data.email, 'Thank you for your sponsorship enquiry – Shadwell Dragons', confirmHtml);
