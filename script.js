@@ -127,12 +127,12 @@ document.querySelectorAll('.book-form').forEach(form => {
                     ? 'Thank you! We will be in touch shortly to discuss your corporate event.'
                     : form.id === 'contactForm'
                     ? 'Thank you for your message! We will be in touch shortly.'
-                    : 'Thank you! We will contact you shortly to confirm your taster session. Please fill in the form on the next page before your first session.';
+                    : 'Thank you! We will contact you shortly to confirm your taster session. Please fill in the form on the next page before your first session. Redirecting now...';
                 form.reset();
                 if (form.id === 'booking-form') {
                     setTimeout(() => {
                         window.location.assign('http://bit.ly/40RdL92');
-                    }, 3000);
+                    }, 5000);
                 }
             } else {
                 throw new Error(result.error || 'Failed to submit form');
