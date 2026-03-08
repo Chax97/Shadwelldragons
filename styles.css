@@ -114,18 +114,18 @@ body.index-page .getting-there {
     text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.15rem;
 }
 
 .nav-logo {
-    height: 36px;
+    height: 96px;
     width: auto;
     display: block;
 }
 
 .logo h1 {
     font-family: 'Poppins', sans-serif;
-    font-size: 1.35rem;
+    font-size: 1.65rem;
     font-weight: 800;
     background: linear-gradient(135deg, #B91C1C 0%, #DC2626 50%, #EF4444 100%);
     -webkit-background-clip: text;
@@ -3123,10 +3123,10 @@ body.index-page .sponsors-section {
     /* Loom-style mobile nav - slides down below navbar */
     .nav-menu {
         position: fixed;
-        top: 70px;
+        top: 160px;
         left: 0;
         width: 100%;
-        height: calc(100vh - 70px);
+        height: calc(100vh - 160px);
         background: var(--white);
         flex-direction: column;
         justify-content: flex-start;
@@ -3273,6 +3273,18 @@ body.index-page .sponsors-section {
         display: none;
     }
 
+    .nav-logo {
+        height: 96px;
+    }
+
+    body.inner-page .nav-logo {
+        height: 48px;
+    }
+
+    .page-header {
+        margin-top: 160px;
+    }
+
     /* Floating sticky CTA button - bottom right */
     .floating-cta {
         display: flex;
@@ -3416,7 +3428,7 @@ body.index-page .sponsors-section {
 
     .page-header {
         padding: 0.75rem 1rem;
-        margin-top: 70px;
+        margin-top: 160px;
     }
 
     .page-header h2 {
@@ -3783,7 +3795,7 @@ body.index-page .sponsors-section {
 
     .page-header {
         padding: 0.75rem 1rem;
-        margin-top: 70px;
+        margin-top: 160px;
         text-align: center;
         display: flex;
         flex-direction: column;
@@ -3915,7 +3927,7 @@ body.index-page .sponsors-section {
     /* Hero section - mobile */
     .hero {
         min-height: auto;
-        padding-top: 70px;
+        padding-top: 160px;
     }
 
     .hero-subtitle {
@@ -4193,7 +4205,7 @@ body.index-page .sponsors-section {
     /* Page header - mobile */
     .page-header {
         padding: 0.75rem 1rem;
-        margin-top: 70px;
+        margin-top: 160px;
     }
 
     .page-header p {

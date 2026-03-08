@@ -2,7 +2,14 @@
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
 
+function setNavMenuPosition() {
+    const navbarHeight = document.querySelector('.navbar').getBoundingClientRect().height;
+    navMenu.style.top = navbarHeight + 'px';
+    navMenu.style.height = `calc(100vh - ${navbarHeight}px)`;
+}
+
 hamburger.addEventListener('click', () => {
+    setNavMenuPosition();
     const isActive = navMenu.classList.toggle('active');
     hamburger.classList.toggle('active');
     // Lock body scroll when menu is open
