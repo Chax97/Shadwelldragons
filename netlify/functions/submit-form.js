@@ -84,7 +84,7 @@ exports.handler = async (event) => {
         <p>Hi ${data.name || 'there'},</p>
         <p>Thanks for getting in touch! We've received your message and will get back to you shortly.</p>
         <p>If you have any further questions in the meantime, please feel free to contact us info@shadwelldragons.co.uk.</p>
-        <p>Before your first session please fill out this form: https://forms.office.com/pages/responsepage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAAZ__qYaUhpUODVPWlJUN1NaSDFTSkNPSEU4UUlPUUk1MC4u&route=shorturl</p>
+        <p>Before your first session please fill out this form: http://bit.ly/40RdL92</p>
         <br>
         <p>Best wishes,<br>Shadwell Dragons</p>
       `;

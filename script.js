@@ -133,7 +133,7 @@ document.querySelectorAll('.book-form').forEach(form => {
                     console.log('Redirecting...');
                     setTimeout(() => {
                         console.log('Redirect firing now');
-                        window.location.assign('https://docs.google.com/forms/d/e/1FAIpQLSfBv37reF8sEzPO0EmSwcKoYPWkYj5Z3TfXT6tW0bTVcEVzQw/viewform');
+                        window.location.assign('http://bit.ly/40RdL92');
                     }, 2000);
                 }
             } else {
