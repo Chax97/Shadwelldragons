@@ -75,7 +75,7 @@ exports.handler = async (event) => {
     `;
 
     // Notify the team, with reply-to set to the submitter
-    await sendEmail('faisal.chaklader97@gmail.com', subject, html, data.email);
+    await sendEmail('info@shadwelldragons.co.uk', subject, html, data.email);
 
     // Send confirmation to the submitter
     console.log('Confirmation email target:', data.email);
@@ -83,7 +83,7 @@ exports.handler = async (event) => {
       const confirmHtml = `
         <p>Hi ${data.name || 'there'},</p>
         <p>Thanks for getting in touch! We've received your message and will get back to you shortly.</p>
-        <p>If you have any further questions in the meantime, please feel free to contact us info@shadwelldragons.co.uk.</p>
+        <p>If you have any further questions in the meantime, please feel free to contact us info@shadwelldragons.com</p>
         <p>If you've signed up for the free taster session, please fill out this form before your first session: http://bit.ly/40RdL92</p>
         <br>
         <p>Best wishes,<br>Shadwell Dragons</p>
