@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body class="inner-page">
     <!-- Navigation -->
@@ -174,7 +175,8 @@
             <div class="book-content">
                 <h3>Get a Custom Quote</h3>
                 <p>Tell us about your team and we'll put together the perfect experience.</p>
-                <form class="book-form" id="corporateForm">
+                <form class="book-form" id="corporateForm" name="corporate" data-netlify="true">
+                    <input type="hidden" name="form-name" value="corporate">
                     <div class="form-row">
                         <input type="text" name="name" placeholder="Your Name" required>
                         <input type="text" name="company" placeholder="Company Name" required>
@@ -193,6 +195,7 @@
                         <input type="text" name="team_size" placeholder="Approximate Team Size">
                     </div>
                     <textarea name="message" placeholder="Tell us about your event — preferred dates, objectives, or anything else we should know" rows="4"></textarea>
+                    <div class="cf-turnstile" data-sitekey="0x4AAAAAACsZRNtyGvoOKh47"></div>
                     <button type="submit" class="btn btn-primary">Send Enquiry</button>
                     <div class="form-status" style="display: none;"></div>
                 </form>

@@ -49,6 +49,19 @@ window.addEventListener('scroll', () => {
     }
 });
 
+// Submit a copy of form data to Netlify Forms for dashboard visibility
+function submitToNetlify(formName, data) {
+    const fields = Object.entries(data)
+        .filter(([key]) => key !== 'turnstileToken')
+        .map(([key, val]) => `${encodeURIComponent(key)}=${encodeURIComponent(val)}`)
+        .join('&');
+    fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `form-name=${encodeURIComponent(formName)}&${fields}`,
+    }).catch(() => {});
+}
+
 // Form submission handling - supports booking and sponsorship forms
 document.querySelectorAll('.book-form').forEach(form => {
     form.addEventListener('submit', async (e) => {
@@ -64,6 +77,16 @@ document.querySelectorAll('.book-form').forEach(form => {
         const isCorporate = form.id === 'corporateForm';
         const isContact = form.id === 'contactForm';
 
+        // Check Turnstile token
+        const turnstileToken = form.querySelector('[name="cf-turnstile-response"]')?.value || '';
+        if (!turnstileToken) {
+            formStatus.style.display = 'block';
+            formStatus.className = 'form-status error';
+            formStatus.textContent = 'Please complete the security check before submitting.';
+            setTimeout(() => { formStatus.style.display = 'none'; }, 6000);
+            return;
+        }
+
         // Disable button and show loading state
         submitBtn.disabled = true;
         submitBtn.textContent = 'Submitting...';
@@ -78,7 +101,8 @@ document.querySelectorAll('.book-form').forEach(form => {
                 email: form.querySelector('[name="email"]').value,
                 level: form.querySelector('[name="level"]')?.value || '',
                 message: form.querySelector('[name="message"]')?.value || '',
-                source: 'website-sponsorship'
+                source: 'website-sponsorship',
+                turnstileToken
             };
             endpoint = '/.netlify/functions/submit-sponsorship';
         } else if (isCorporate) {
@@ -90,7 +114,8 @@ document.querySelectorAll('.book-form').forEach(form => {
                 package: form.querySelector('[name="package"]')?.value || '',
                 team_size: form.querySelector('[name="team_size"]')?.value || '',
                 message: form.querySelector('[name="message"]')?.value || '',
-                source: 'website-corporate'
+                source: 'website-corporate',
+                turnstileToken
             };
             endpoint = '/.netlify/functions/submit-corporate';
         } else if (isContact) {
@@ -98,7 +123,8 @@ document.querySelectorAll('.book-form').forEach(form => {
                 name: form.querySelector('[name="name"]').value,
                 email: form.querySelector('[name="email"]').value,
                 message: form.querySelector('[name="message"]')?.value || '',
-                source: 'website-contact'
+                source: 'website-contact',
+                turnstileToken
             };
             endpoint = '/.netlify/functions/submit-form';
         } else {
@@ -108,12 +134,16 @@ document.querySelectorAll('.book-form').forEach(form => {
                 phone: form.querySelector('[name="phone"]')?.value || '',
                 session: form.querySelector('[name="session"]')?.value || '',
                 message: form.querySelector('[name="message"]')?.value || '',
-                source: 'website-booking'
+                source: 'website-booking',
+                turnstileToken
             };
             endpoint = '/.netlify/functions/submit-form';
         }
 
         try {
+            const netlifyFormName = isSponsorship ? 'sponsorship' : isCorporate ? 'corporate' : isContact ? 'contact' : 'booking';
+            submitToNetlify(netlifyFormName, formData);
+
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
@@ -187,9 +217,10 @@ document.querySelectorAll('.book-form').forEach(form => {
             formStatus.className = 'form-status error';
             formStatus.innerHTML = `Form submission unavailable. <a href="${mailtoLink}" style="color: #fca5a5; text-decoration: underline;">Click here to email us directly</a> with your details.`;
         } finally {
-            // Re-enable button
+            // Re-enable button and reset Turnstile
             submitBtn.disabled = false;
             submitBtn.textContent = originalBtnText;
+            if (window.turnstile) turnstile.reset();
 
             // Hide status message after 10 seconds (longer for error with link)
             setTimeout(() => {

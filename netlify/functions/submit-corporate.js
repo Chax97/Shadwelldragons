@@ -1,5 +1,15 @@
 const { google } = require('googleapis');
 
+async function verifyTurnstile(token) {
+  const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ secret: process.env.TURNSTILE_SECRET_KEY, response: token }),
+  });
+  const data = await res.json();
+  return data.success === true;
+}
+
 async function sendEmail(to, subject, html, replyTo) {
   const body = {
     from: 'noreply@shadwelldragons.com',
@@ -33,6 +43,11 @@ exports.handler = async (event) => {
 
   try {
     const data = JSON.parse(event.body || '{}');
+
+    const turnstileOk = await verifyTurnstile(data.turnstileToken || '');
+    if (!turnstileOk) {
+      return { statusCode: 400, body: JSON.stringify({ error: 'Bot verification failed. Please try again.' }) };
+    }
 
     const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY || '{}');
     const spreadsheetId = process.env.GOOGLE_SHEET_ID_CORPORATE;

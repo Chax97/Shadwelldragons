@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /c/Users/fiasa/git/repository/Shadwelldragons -maxdepth 3 -type f -name package.json -o -name *.config.js -o -name .env* -o -name tsconfig.json -o -name next.config.js)",
+      "Bash(ls -la /c/Users/fiasa/git/repository/Shadwelldragons/*.html)"
+    ]
+  }
+}
