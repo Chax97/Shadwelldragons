@@ -44,6 +44,10 @@ exports.handler = async (event) => {
   try {
     const data = JSON.parse(event.body || '{}');
 
+    if (data.website) {
+      return { statusCode: 200, body: JSON.stringify({ success: true }) };
+    }
+
     const turnstileOk = await verifyTurnstile(data.turnstileToken || '');
     if (!turnstileOk) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Bot verification failed. Please try again.' }) };
