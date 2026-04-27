@@ -14,6 +14,7 @@ hamburger.addEventListener('click', () => {
     hamburger.classList.toggle('active');
     // Lock body scroll when menu is open
     document.body.style.overflow = isActive ? 'hidden' : '';
+    if (!isActive) resetDropdowns();
 });
 
 // Close menu when clicking on a link
@@ -22,8 +23,49 @@ document.querySelectorAll('.nav-menu a').forEach(link => {
         navMenu.classList.remove('active');
         hamburger.classList.remove('active');
         document.body.style.overflow = '';
+        resetDropdowns();
     });
 });
+
+// Crews dropdown - toggle on mobile, close other open dropdowns on outside click
+document.querySelectorAll('.nav-dropdown').forEach(dropdown => {
+    const toggle = dropdown.querySelector('.nav-dropdown-toggle');
+    if (!toggle) return;
+
+    toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const isMobile = window.innerWidth <= 968;
+        if (isMobile) {
+            const isOpen = dropdown.classList.toggle('open');
+            toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        } else {
+            // On desktop, click toggles for keyboard/touch users; hover handles the rest
+            const isOpen = dropdown.classList.toggle('open');
+            toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        }
+    });
+});
+
+// Close any open desktop dropdowns when clicking outside
+document.addEventListener('click', (e) => {
+    document.querySelectorAll('.nav-dropdown.open').forEach(dropdown => {
+        if (!dropdown.contains(e.target)) {
+            dropdown.classList.remove('open');
+            const toggle = dropdown.querySelector('.nav-dropdown-toggle');
+            if (toggle) toggle.setAttribute('aria-expanded', 'false');
+        }
+    });
+});
+
+// Reset dropdown state when mobile menu closes
+function resetDropdowns() {
+    document.querySelectorAll('.nav-dropdown.open').forEach(dropdown => {
+        dropdown.classList.remove('open');
+        const toggle = dropdown.querySelector('.nav-dropdown-toggle');
+        if (toggle) toggle.setAttribute('aria-expanded', 'false');
+    });
+}
 
 // Smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
