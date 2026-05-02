@@ -73,7 +73,7 @@ exports.handler = async (event) => {
           data.name || '',
           data.email || '',
           data.phone || '',
-          data.session || '',
+          data.referral_source || '',
           data.message || '',
           data.source || 'website'
         ]]
@@ -87,7 +87,7 @@ exports.handler = async (event) => {
       <p><strong>Name:</strong> ${data.name || 'N/A'}</p>
       <p><strong>Email:</strong> ${data.email || 'N/A'}</p>
       ${data.phone ? `<p><strong>Phone:</strong> ${data.phone}</p>` : ''}
-      ${data.session ? `<p><strong>Session:</strong> ${data.session}</p>` : ''}
+      ${data.referral_source ? `<p><strong>Heard About Us:</strong> ${data.referral_source}</p>` : ''}
       ${data.message ? `<p><strong>Message:</strong> ${data.message}</p>` : ''}
       <p><strong>Source:</strong> ${data.source || 'website'}</p>
       <p><strong>Submitted:</strong> ${new Date().toLocaleString('en-GB')}</p>

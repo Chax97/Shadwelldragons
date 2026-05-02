@@ -174,7 +174,7 @@ document.querySelectorAll('.book-form').forEach(form => {
                 name: form.querySelector('[name="name"]').value,
                 email: form.querySelector('[name="email"]').value,
                 phone: form.querySelector('[name="phone"]')?.value || '',
-                session: form.querySelector('[name="session"]')?.value || '',
+                referral_source: form.querySelector('[name="referral_source"]')?.value || '',
                 message: form.querySelector('[name="message"]')?.value || '',
                 source: 'website-booking',
                 turnstileToken
@@ -244,12 +244,12 @@ document.querySelectorAll('.book-form').forEach(form => {
                     `Message: ${formData.message || 'N/A'}`
                 );
             } else {
-                subject = encodeURIComponent(`Taster Session Booking - ${formData.session}`);
+                subject = encodeURIComponent('Taster Session Booking');
                 body = encodeURIComponent(
                     `Name: ${formData.name}\n` +
                     `Email: ${formData.email}\n` +
                     `Phone: ${formData.phone}\n` +
-                    `Preferred Session: ${formData.session}\n` +
+                    `Heard About Us: ${formData.referral_source}\n` +
                     `Message: ${formData.message || 'N/A'}`
                 );
             }
@@ -912,3 +912,159 @@ if (document.body.classList.contains('legacy-page')) {
         legacyResizeTimer = setTimeout(buildStoryPath, 200);
     });
 }
+
+// Meet the Team - randomise card order on page load (preserves per-column counts)
+(function shuffleTeam() {
+    const cols = document.querySelectorAll('[data-team-col]');
+    if (!cols.length) return;
+
+    const allCards = [];
+    const capacities = [];
+    cols.forEach(col => {
+        const cards = Array.from(col.querySelectorAll('[data-team-card]'));
+        capacities.push(cards.length);
+        allCards.push(...cards);
+    });
+
+    for (let i = allCards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [allCards[i], allCards[j]] = [allCards[j], allCards[i]];
+    }
+
+    let idx = 0;
+    cols.forEach((col, colIdx) => {
+        col.querySelectorAll('[data-team-card]').forEach(c => c.remove());
+        for (let i = 0; i < capacities[colIdx]; i++) {
+            col.appendChild(allCards[idx++]);
+        }
+    });
+})();
+
+// Meet the Team - column-based parallax + reveal-on-scroll
+(function teamParallax() {
+    const section = document.querySelector('.team-ops');
+    const cols = document.querySelectorAll('[data-team-col]');
+    const cards = document.querySelectorAll('[data-team-card]');
+    if (!section || !cols.length) return;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reducedMotion) {
+        cards.forEach(c => c.classList.add('is-visible'));
+        return;
+    }
+
+    if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -80px 0px' });
+        cards.forEach(c => io.observe(c));
+    } else {
+        cards.forEach(c => c.classList.add('is-visible'));
+    }
+
+    let isMobile = window.matchMedia('(max-width: 968px)').matches;
+    const PARALLAX_STRENGTH = 0.18;
+    const MAX_OFFSET = 120;
+    let ticking = false;
+    let viewportH = window.innerHeight;
+
+    function updateParallax() {
+        ticking = false;
+        if (isMobile) {
+            cols.forEach(col => col.style.removeProperty('--parallax-y'));
+            return;
+        }
+
+        const rect = section.getBoundingClientRect();
+        if (rect.bottom < -200 || rect.top > viewportH + 200) return;
+
+        // Centred parallax: offset is zero when section centre is at viewport centre,
+        // and grows symmetrically in both directions. Clamped to MAX_OFFSET.
+        const sectionMid = rect.top + rect.height / 2;
+        const viewportMid = viewportH / 2;
+        const scrollProgress = viewportMid - sectionMid;
+
+        cols.forEach((col) => {
+            const speed = parseFloat(col.dataset.speed) || 1.0;
+            let offset = scrollProgress * (1 - speed) * PARALLAX_STRENGTH;
+            if (offset > MAX_OFFSET) offset = MAX_OFFSET;
+            else if (offset < -MAX_OFFSET) offset = -MAX_OFFSET;
+            col.style.setProperty('--parallax-y', offset.toFixed(1) + 'px');
+        });
+    }
+
+    function onScroll() {
+        if (!ticking) {
+            requestAnimationFrame(updateParallax);
+            ticking = true;
+        }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', () => {
+        viewportH = window.innerHeight;
+        isMobile = window.matchMedia('(max-width: 968px)').matches;
+        onScroll();
+    }, { passive: true });
+
+    updateParallax();
+})();
+
+// Next Taster Sessions (first-timers page) - render next 3 upcoming Saturdays
+(function renderNextTasterSessions() {
+    const container = document.getElementById('next-taster-sessions');
+    if (!container) return;
+
+    const time = container.dataset.sessionTime || '10:00am';
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    const ordinal = (n) => {
+        const mod100 = n % 100;
+        if (mod100 >= 11 && mod100 <= 13) return n + 'th';
+        switch (n % 10) {
+            case 1: return n + 'st';
+            case 2: return n + 'nd';
+            case 3: return n + 'rd';
+            default: return n + 'th';
+        }
+    };
+
+    const now = new Date();
+    const first = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const dayOfWeek = first.getDay(); // 0 Sun ... 6 Sat
+    let daysUntilSat = (6 - dayOfWeek + 7) % 7;
+
+    // If today is Saturday and it's already past the session start time, skip to next week
+    if (daysUntilSat === 0 && now.getHours() >= 10) {
+        daysUntilSat = 7;
+    }
+    first.setDate(first.getDate() + daysUntilSat);
+
+    const fragment = document.createDocumentFragment();
+    for (let i = 0; i < 3; i++) {
+        const d = new Date(first);
+        d.setDate(first.getDate() + i * 7);
+
+        const item = document.createElement('div');
+        item.className = 'session-item';
+
+        const dateEl = document.createElement('div');
+        dateEl.className = 'session-date';
+        dateEl.textContent = `Sat, ${ordinal(d.getDate())} ${months[d.getMonth()]}`;
+
+        const timeEl = document.createElement('div');
+        timeEl.className = 'session-time';
+        timeEl.textContent = time;
+
+        item.appendChild(dateEl);
+        item.appendChild(timeEl);
+        fragment.appendChild(item);
+    }
+    container.appendChild(fragment);
+})();
