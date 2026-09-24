@@ -6635,19 +6635,29 @@ body.legacy-page {
     transform: translateY(0);
 }
 
+/* Mike and Tofujol share the top row; Vas sits beneath them spanning the full
+   width, so her longer reflection reads as a passage rather than a narrow
+   column. Grid placement does the reordering, leaving the HTML order intact. */
 .leadership-cards {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
     gap: 2.5rem;
     justify-content: center;
-    flex-wrap: wrap;
     max-width: 920px;
     margin: 0 auto;
 }
 
+#leader-1 {
+    grid-column: 1 / -1;
+    grid-row: 2;
+}
+
+#leader-1 .leader-bio {
+    text-align: left;
+}
+
 .leader-card {
-    flex: 1;
-    min-width: 280px;
-    max-width: 400px;
+    min-width: 0;
     background: #ffffff;
     border: 1px solid var(--gray-200);
     padding: 2.5rem;
@@ -6859,6 +6869,20 @@ body.legacy-page {
 
 /* Legacy responsive */
 @media (max-width: 900px) {
+    /* Single column on narrow screens; Vas returns to natural document order. */
+    .leadership-cards {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    #leader-1 {
+        grid-column: auto;
+        grid-row: auto;
+    }
+
+    #leader-1 .leader-bio {
+        text-align: center;
+    }
+
     .story-path-svg {
         display: none;
     }
