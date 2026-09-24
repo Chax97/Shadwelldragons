@@ -94,7 +94,7 @@ window.addEventListener('scroll', () => {
 // Submit a copy of form data to Netlify Forms for dashboard visibility
 function submitToNetlify(formName, data) {
     const fields = Object.entries(data)
-        .filter(([key]) => key !== 'turnstileToken')
+        .filter(([key]) => !['turnstileToken', 'website', 'formRenderedAt'].includes(key))
         .map(([key, val]) => `${encodeURIComponent(key)}=${encodeURIComponent(val)}`)
         .join('&');
     fetch('/', {
@@ -106,6 +106,11 @@ function submitToNetlify(formName, data) {
 
 // Form submission handling - supports booking and sponsorship forms
 document.querySelectorAll('.book-form').forEach(form => {
+    // Stamped when the form is ready, so the server can reject submissions
+    // completed faster than a person could fill them in. Reset after a
+    // successful submit so a second genuine enquiry is not rejected as stale.
+    let formRenderedAt = Date.now();
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -133,6 +138,9 @@ document.querySelectorAll('.book-form').forEach(form => {
         submitBtn.disabled = true;
         submitBtn.textContent = 'Submitting...';
 
+        // Honeypot: hidden via CSS, so a genuine submission leaves it empty.
+        const honeypot = form.querySelector('[name="website"]')?.value || '';
+
         // Collect form data based on form type
         let formData;
         let endpoint;
@@ -144,7 +152,9 @@ document.querySelectorAll('.book-form').forEach(form => {
                 level: form.querySelector('[name="level"]')?.value || '',
                 message: form.querySelector('[name="message"]')?.value || '',
                 source: 'website-sponsorship',
-                turnstileToken
+                turnstileToken,
+                website: honeypot,
+                formRenderedAt
             };
             endpoint = '/.netlify/functions/submit-sponsorship';
         } else if (isCorporate) {
@@ -157,7 +167,9 @@ document.querySelectorAll('.book-form').forEach(form => {
                 team_size: form.querySelector('[name="team_size"]')?.value || '',
                 message: form.querySelector('[name="message"]')?.value || '',
                 source: 'website-corporate',
-                turnstileToken
+                turnstileToken,
+                website: honeypot,
+                formRenderedAt
             };
             endpoint = '/.netlify/functions/submit-corporate';
         } else if (isContact) {
@@ -166,7 +178,9 @@ document.querySelectorAll('.book-form').forEach(form => {
                 email: form.querySelector('[name="email"]').value,
                 message: form.querySelector('[name="message"]')?.value || '',
                 source: 'website-contact',
-                turnstileToken
+                turnstileToken,
+                website: honeypot,
+                formRenderedAt
             };
             endpoint = '/.netlify/functions/submit-form';
         } else {
@@ -177,7 +191,9 @@ document.querySelectorAll('.book-form').forEach(form => {
                 referral_source: form.querySelector('[name="referral_source"]')?.value || '',
                 message: form.querySelector('[name="message"]')?.value || '',
                 source: 'website-booking',
-                turnstileToken
+                turnstileToken,
+                website: honeypot,
+                formRenderedAt
             };
             endpoint = '/.netlify/functions/submit-form';
         }
@@ -208,6 +224,7 @@ document.querySelectorAll('.book-form').forEach(form => {
                     ? 'Thank you for your message! We will be in touch shortly.'
                     : 'Thank you! We will contact you shortly to confirm your taster session. Please fill in the form on the next page before your first session. Redirecting now...';
                 form.reset();
+                formRenderedAt = Date.now();
                 if (form.id === 'booking-form') {
                     setTimeout(() => {
                         window.location.assign('http://bit.ly/40RdL92');

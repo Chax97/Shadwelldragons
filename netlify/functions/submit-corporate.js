@@ -1,4 +1,5 @@
 const { google } = require('googleapis');
+const { checkSubmission } = require('./antispam');
 
 async function verifyTurnstile(token) {
   const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
@@ -44,9 +45,8 @@ exports.handler = async (event) => {
   try {
     const data = JSON.parse(event.body || '{}');
 
-    if (data.website) {
-      return { statusCode: 200, body: JSON.stringify({ success: true }) };
-    }
+    const rejected = checkSubmission(event, data);
+    if (rejected) return rejected;
 
     const turnstileOk = await verifyTurnstile(data.turnstileToken || '');
     if (!turnstileOk) {
