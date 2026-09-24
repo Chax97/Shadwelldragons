@@ -6692,9 +6692,12 @@ body.legacy-page {
     margin-bottom: 1.25rem;
 }
 
+/* 110px is the practical ceiling: Mike's source portrait is only 75x75, so
+   larger display sizes visibly soften it. Replace that image with a
+   higher-resolution original before increasing this further. */
 .leader-portrait-img {
-    width: 72px;
-    height: 72px;
+    width: 110px;
+    height: 110px;
     border-radius: 50%;
     object-fit: cover;
     object-position: center top;
