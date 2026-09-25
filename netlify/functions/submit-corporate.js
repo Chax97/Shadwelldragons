@@ -1,5 +1,5 @@
 const { google } = require('googleapis');
-const { checkSubmission } = require('./antispam');
+const { checkSubmission, isTorExit } = require('./antispam');
 
 async function verifyTurnstile(token) {
   const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
@@ -45,8 +45,12 @@ exports.handler = async (event) => {
   try {
     const data = JSON.parse(event.body || '{}');
 
-    const rejected = checkSubmission(event, data);
-    if (rejected) return rejected;
+    const { reject, flagged, reasons } = checkSubmission(event, data);
+    if (reject) return reject;
+
+    const viaTor = await isTorExit(event);
+    const allReasons = viaTor ? [...reasons, 'tor exit node'] : reasons;
+    const isFlagged = flagged || viaTor;
 
     const turnstileOk = await verifyTurnstile(data.turnstileToken || '');
     if (!turnstileOk) {
@@ -65,7 +69,7 @@ exports.handler = async (event) => {
 
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: 'Sheet1!A:I',
+      range: 'Sheet1!A:J',
       valueInputOption: 'RAW',
       requestBody: {
         values: [[
@@ -77,10 +81,19 @@ exports.handler = async (event) => {
           data.package || '',
           data.team_size || '',
           data.message || '',
-          data.source || 'corporate-page'
+          data.source || 'corporate-page',
+          isFlagged ? `SUSPECTED_SPAM: ${allReasons.join(', ')}` : ''
         ]]
       }
     });
+
+    // Flagged submissions are recorded but generate no email.
+    if (isFlagged) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ success: true, message: 'Corporate enquiry submitted successfully!' })
+      };
+    }
 
     const html = `
       <h2>New Corporate Enquiry</h2>

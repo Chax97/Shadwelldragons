@@ -1,5 +1,5 @@
 const { google } = require('googleapis');
-const { checkSubmission } = require('./antispam');
+const { checkSubmission, isTorExit } = require('./antispam');
 
 // Escape user input before putting it into email HTML
 function esc(value) {
@@ -77,11 +77,18 @@ exports.handler = async (event) => {
       source: data.source,
     });
 
-    const rejected = checkSubmission(event, data);
-    if (rejected) {
+    const { reject, flagged, reasons } = checkSubmission(event, data);
+    if (reject) {
       console.log('Rejected by antispam', { ip, email: data.email });
-      return rejected;
+      return reject;
     }
+
+    // Tor is flagged rather than rejected: it is a strong spam signal here,
+    // but a legitimate visitor using it for privacy still reaches the sheet.
+    const viaTor = await isTorExit(event);
+    const allReasons = viaTor ? [...reasons, 'tor exit node'] : reasons;
+    const isFlagged = flagged || viaTor;
+    if (viaTor) console.log('Tor exit node', { ip, email: data.email });
 
     const turnstileOk = await verifyTurnstile(data.turnstileToken || '', ip);
     if (!turnstileOk) {
@@ -101,7 +108,7 @@ exports.handler = async (event) => {
 
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: 'Sheet1!A:I',
+      range: 'Sheet1!A:J',
       valueInputOption: 'RAW',
       requestBody: {
         values: [[
@@ -113,10 +120,20 @@ exports.handler = async (event) => {
           data.message || '',
           data.source || 'website',
           ip,
-          userAgent
+          userAgent,
+          isFlagged ? `SUSPECTED_SPAM: ${allReasons.join(', ')}` : ''
         ]]
       }
     });
+
+    // A flagged submission is kept in the sheet but generates no email, so a
+    // wrongly flagged enquiry can still be found and answered by hand.
+    if (isFlagged) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ success: true, message: 'Form submitted successfully!' })
+      };
+    }
 
     const isContact = data.source === 'website-contact';
     const subject = isContact ? 'New Contact Enquiry' : 'New Booking Enquiry';
