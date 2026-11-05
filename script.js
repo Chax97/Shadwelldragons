@@ -1085,3 +1085,92 @@ if (document.body.classList.contains('legacy-page')) {
     }
     container.appendChild(fragment);
 })();
+
+// Donations - the SumUp link and click tracking for every donate button.
+// Paste the SumUp payment link between the quotes when the foundation sends it.
+// It then replaces the links on the Donate page and in the pop-up.
+const SUMUP_DONATE_LINK = '';
+
+// Does nothing until the analytics script is added to the pages
+function trackEvent(name, props) {
+    if (window.umami) {
+        window.umami.track(name, props);
+    }
+}
+
+if (SUMUP_DONATE_LINK) {
+    document.querySelectorAll('[data-payment-link]').forEach(button => {
+        button.href = SUMUP_DONATE_LINK;
+    });
+}
+
+// Buttons that leave the site count as payment clicks, the rest as visits to the Donate page
+document.addEventListener('click', (e) => {
+    const button = e.target.closest('[data-donate-location]');
+    if (!button) return;
+    const leavesSite = button.hostname !== window.location.hostname;
+    trackEvent(leavesSite ? 'Donate Payment Click' : 'Donate Page Click', {
+        location: button.dataset.donateLocation
+    });
+});
+
+// Donate pop-up - appears once per visit, on any page except Donate
+(function initDonatePopup() {
+    if (document.body.classList.contains('donate-page')) return;
+
+    const DONATE_LINK = SUMUP_DONATE_LINK || 'donate.html';
+
+    const STORAGE_KEY = 'donatePopupShown';
+    const SHOW_AFTER_MS = 8000;
+    const RETRY_MS = 5000;
+
+    // Always show it during local testing, so a page reload brings it back
+    const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+
+    // Storage can be blocked (private windows), so failures just mean "not seen yet"
+    try {
+        if (!isLocal && sessionStorage.getItem(STORAGE_KEY)) return;
+    } catch (err) { /* show it anyway */ }
+
+    function showPopup() {
+        // Wait rather than interrupt someone filling in a form or using the mobile menu
+        const typing = document.activeElement && document.activeElement.closest('form');
+        if (typing || navMenu.classList.contains('active')) {
+            setTimeout(showPopup, RETRY_MS);
+            return;
+        }
+
+        try {
+            sessionStorage.setItem(STORAGE_KEY, 'true');
+        } catch (err) { /* nothing to remember it with */ }
+
+        const popup = document.createElement('aside');
+        popup.className = 'donate-popup';
+        popup.setAttribute('aria-label', 'Donate to our charity partner');
+        popup.innerHTML = `
+            <button type="button" class="donate-popup-close" aria-label="Close">×</button>
+            <img src="images/logo_mikaeel_foundation.jpg" alt="Mikaeel Foundation" class="donate-popup-logo">
+            <h4>Support the Mikaeel Foundation</h4>
+            <p>Help our charity partner support mothers, babies and children.</p>
+            <a class="btn btn-donate" data-donate-location="popup">Donate</a>
+        `;
+
+        // External payment links open in a new tab so visitors keep their place here
+        const donateButton = popup.querySelector('.btn-donate');
+        donateButton.href = DONATE_LINK;
+        if (DONATE_LINK.startsWith('http')) {
+            donateButton.target = '_blank';
+            donateButton.rel = 'noopener noreferrer';
+        }
+
+        document.body.appendChild(popup);
+        trackEvent('Donate Popup Shown');
+
+        popup.querySelector('.donate-popup-close').addEventListener('click', () => popup.remove());
+
+        // Next frame, so the slide-in transition has a starting point
+        requestAnimationFrame(() => requestAnimationFrame(() => popup.classList.add('visible')));
+    }
+
+    setTimeout(showPopup, SHOW_AFTER_MS);
+})();
