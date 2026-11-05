@@ -1114,24 +1114,22 @@ document.addEventListener('click', (e) => {
     });
 });
 
-// Donate pop-up - appears once per week per visitor, on every page except Donate
+// Donate pop-up - appears once per visit, on any page except Donate
 (function initDonatePopup() {
     if (document.body.classList.contains('donate-page')) return;
 
     const DONATE_LINK = SUMUP_DONATE_LINK || 'donate.html';
 
-    const STORAGE_KEY = 'donatePopupShownAt';
+    const STORAGE_KEY = 'donatePopupShown';
     const SHOW_AFTER_MS = 8000;
     const RETRY_MS = 5000;
-    const REPEAT_AFTER_MS = 7 * 24 * 60 * 60 * 1000;
 
-    // Always show it during local testing, otherwise it vanishes for a week after the first view
+    // Always show it during local testing, so a page reload brings it back
     const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
 
     // Storage can be blocked (private windows), so failures just mean "not seen yet"
     try {
-        const shownAt = Number(localStorage.getItem(STORAGE_KEY));
-        if (!isLocal && shownAt && Date.now() - shownAt < REPEAT_AFTER_MS) return;
+        if (!isLocal && sessionStorage.getItem(STORAGE_KEY)) return;
     } catch (err) { /* show it anyway */ }
 
     function showPopup() {
@@ -1143,7 +1141,7 @@ document.addEventListener('click', (e) => {
         }
 
         try {
-            localStorage.setItem(STORAGE_KEY, String(Date.now()));
+            sessionStorage.setItem(STORAGE_KEY, 'true');
         } catch (err) { /* nothing to remember it with */ }
 
         const popup = document.createElement('aside');
