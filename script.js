@@ -227,7 +227,7 @@ document.querySelectorAll('.book-form').forEach(form => {
                 formRenderedAt = Date.now();
                 if (form.id === 'booking-form') {
                     setTimeout(() => {
-                        window.location.assign('http://bit.ly/40RdL92');
+                        window.location.assign('https://bit.ly/40RdL92');
                     }, 5000);
                 }
             } else {
