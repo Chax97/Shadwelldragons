@@ -5537,6 +5537,163 @@ body.index-page .sponsors-section {
     margin-top: 0.5rem;
 }
 
+/* Donate page - intro photo */
+.donate-intro-image {
+    display: block;
+    width: 100%;
+    max-width: 480px;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    margin: 2rem auto 0;
+    border-radius: var(--radius-lg);
+}
+
+/* Donate page - money raised, shown over the team photo */
+.donate-raised {
+    position: relative;
+    overflow: hidden;
+    padding: 6rem 0;
+    text-align: center;
+    color: var(--white);
+    background: var(--dark-red);
+}
+
+.donate-raised-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.donate-raised-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(69, 10, 10, 0.9) 0%, rgba(127, 29, 29, 0.82) 60%, rgba(185, 28, 28, 0.75) 100%);
+}
+
+.donate-raised .container {
+    position: relative;
+    max-width: 760px;
+}
+
+.donate-raised h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.donate-raised-total {
+    font-family: 'Poppins', sans-serif;
+    font-size: 6rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 1rem;
+}
+
+.donate-raised-label {
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+}
+
+.donate-raised-story {
+    max-width: 640px;
+    margin: 0 auto 1.5rem;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    opacity: 0.92;
+}
+
+.donate-raised-source {
+    font-size: 0.9rem;
+    opacity: 0.75;
+}
+
+/* Donate page - what donations have achieved */
+.donate-impact-container {
+    max-width: 1200px;
+}
+
+.donate-impact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    text-align: center;
+}
+
+.donate-impact-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+}
+
+.donate-impact-card img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
+
+.donate-impact-body {
+    padding: 1.5rem;
+}
+
+.donate-impact-body h5 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+}
+
+.donate-impact-body p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-light);
+}
+
+.donate-source {
+    margin-top: 2.5rem;
+    font-size: 0.95rem;
+    color: var(--text-light);
+}
+
+.donate-source a {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+@media (max-width: 968px) {
+    .donate-impact-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .donate-impact-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .donate-raised {
+        padding: 4rem 0;
+    }
+
+    .donate-raised-total {
+        font-size: 3.75rem;
+    }
+
+    .donate-raised-label {
+        font-size: 1.1rem;
+    }
+}
+
 /* Donate pop-up - slides in at the bottom corner, never blocks the page */
 .donate-popup {
     position: fixed;

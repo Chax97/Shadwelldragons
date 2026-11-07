@@ -629,6 +629,18 @@ function initGalleryCarousel() {
 
     const dots = Array.from(dotsContainer.children);
 
+    // Gallery photos are lazy-loaded, but slides off to the side can stay blank until
+    // they rotate in. Once the gallery is near the screen, fetch every slide's photo.
+    const carouselImages = track.querySelectorAll('img[loading="lazy"]');
+    if ('IntersectionObserver' in window && carouselImages.length) {
+        const preload = new IntersectionObserver((entries) => {
+            if (!entries.some(entry => entry.isIntersecting)) return;
+            carouselImages.forEach(img => { img.loading = 'eager'; });
+            preload.disconnect();
+        }, { rootMargin: '400px 0px' });
+        preload.observe(track);
+    }
+
     function updateCarousel() {
         // Move track
         track.style.transform = `translateX(-${currentIndex * 100}%)`;
@@ -1086,22 +1098,14 @@ if (document.body.classList.contains('legacy-page')) {
     container.appendChild(fragment);
 })();
 
-// Donations - the SumUp link and click tracking for every donate button.
-// Paste the SumUp payment link between the quotes when the foundation sends it.
-// It then replaces the links on the Donate page and in the pop-up.
-const SUMUP_DONATE_LINK = '';
+// Donations - click tracking for every donate button.
+// The SumUp payment link is set on the Donate page's buttons in donate.html.
 
-// Does nothing until the analytics script is added to the pages
+// Sends an event to Umami, if its script has loaded
 function trackEvent(name, props) {
     if (window.umami) {
         window.umami.track(name, props);
     }
-}
-
-if (SUMUP_DONATE_LINK) {
-    document.querySelectorAll('[data-payment-link]').forEach(button => {
-        button.href = SUMUP_DONATE_LINK;
-    });
 }
 
 // Buttons that leave the site count as payment clicks, the rest as visits to the Donate page
@@ -1117,8 +1121,6 @@ document.addEventListener('click', (e) => {
 // Donate pop-up - appears once per visit, on any page except Donate
 (function initDonatePopup() {
     if (document.body.classList.contains('donate-page')) return;
-
-    const DONATE_LINK = SUMUP_DONATE_LINK || 'donate.html';
 
     const STORAGE_KEY = 'donatePopupShown';
     const SHOW_AFTER_MS = 8000;
@@ -1152,16 +1154,8 @@ document.addEventListener('click', (e) => {
             <img src="images/logo_mikaeel_foundation.jpg" alt="Mikaeel Foundation" class="donate-popup-logo">
             <h4>Support the Mikaeel Foundation</h4>
             <p>Help our charity partner support mothers, babies and children.</p>
-            <a class="btn btn-donate" data-donate-location="popup">Donate</a>
+            <a href="donate.html" class="btn btn-donate" data-donate-location="popup">Learn More</a>
         `;
-
-        // External payment links open in a new tab so visitors keep their place here
-        const donateButton = popup.querySelector('.btn-donate');
-        donateButton.href = DONATE_LINK;
-        if (DONATE_LINK.startsWith('http')) {
-            donateButton.target = '_blank';
-            donateButton.rel = 'noopener noreferrer';
-        }
 
         document.body.appendChild(popup);
         trackEvent('Donate Popup Shown');
@@ -1173,4 +1167,34 @@ document.addEventListener('click', (e) => {
     }
 
     setTimeout(showPopup, SHOW_AFTER_MS);
+})();
+
+// Lazy-load videos: the file only downloads when the video is about to scroll into view
+(function lazyVideos() {
+    const videos = document.querySelectorAll('video[data-lazy-video]');
+    if (!videos.length) return;
+
+    function loadVideo(video) {
+        video.querySelectorAll('source[data-src]').forEach(source => {
+            source.src = source.dataset.src;
+            source.removeAttribute('data-src');
+        });
+        video.load();
+        if (video.autoplay) video.play().catch(() => {});
+    }
+
+    if (!('IntersectionObserver' in window)) {
+        videos.forEach(loadVideo);
+        return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                loadVideo(entry.target);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { rootMargin: '300px 0px' });
+    videos.forEach(video => observer.observe(video));
 })();
