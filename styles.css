@@ -2548,6 +2548,19 @@ body.index-page .sponsors-section {
     margin-bottom: 1rem;
 }
 
+.included-item p a {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.included-note {
+    max-width: 640px;
+    margin: 1.5rem auto 0;
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--text-light);
+}
+
 .included-item h5 {
     font-family: 'Poppins', sans-serif;
     font-size: 1.2rem;
