@@ -1152,7 +1152,7 @@ document.addEventListener('click', (e) => {
         popup.innerHTML = `
             <button type="button" class="donate-popup-close" aria-label="Close">×</button>
             <img src="images/logo_mikaeel_foundation.jpg" alt="Mikaeel Foundation" class="donate-popup-logo">
-            <h4>Support the Mikaeel Foundation</h4>
+            <h4>Support Mikaeel Foundation</h4>
             <p>Help our charity partner support families, orphans and children in need around the world.</p>
             <a href="donate.html" class="btn btn-donate" data-donate-location="popup">Learn More</a>
         `;
